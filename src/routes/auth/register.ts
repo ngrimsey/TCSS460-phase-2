@@ -57,7 +57,7 @@ const emailMiddlewareCheck = (
     } else {
         response.status(400).send({
             message:
-                'Invalid or missing email  - please refer to documentation',
+                'Invalid or missing email - please refer to documentation',
         });
     }
 };
