@@ -23,3 +23,10 @@ jobs:
 
     - name: Generate API documentation
       run: npx apidoc -i src/ -o docs/
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+      publish_dir: ./docs  # Directory with your generated docs
+      publish_branch: gh-pages  # Branch for GitHub Pages
