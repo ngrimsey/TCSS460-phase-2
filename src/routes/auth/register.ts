@@ -65,7 +65,7 @@ const emailMiddlewareCheck = (
 /**
  * @api {post} /register Request to register a user
  *
- * @apiDescription Document this route. !**Document the password rules here**!
+ * @apiDescription Document this route. !** TEST POST PLEASE IGNORE WILL REVERT Document the password rules here**!
  * !**Document the role rules here**!
  *
  * @apiName PostRegister
