@@ -24,27 +24,34 @@ export interface IUserRequest extends Request {
     id: number;
 }
 
-// Add more/your own password validation here. The *rules* must be documented
-// and the client-side validation should match these rules.
+// Password validation
+// Password must be at least 8 characters long and contain at least one
+// uppercase letter, one lowercase letter, one number, and one special character(!, @, #, $, %, ^, &, *)
 const isValidPassword = (password: string): boolean =>
-    isStringProvided(password) && password.length > 7;
+    isStringProvided(password) &&
+    password.length > 7 &&
+    /[!@#$%^&*]/.test(password) &&
+    /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
+    /[0-9]/.test(password);
 
-// Add more/your own phone number validation here. The *rules* must be documented
-// and the client-side validation should match these rules.
+// Phone number validation
+// Phone number must be at least 10 characters long and contain only numbers
 const isValidPhone = (phone: string): boolean =>
-    isStringProvided(phone) && phone.length >= 10;
+    isNumberProvided(phone) && phone.length >= 10;
 
-// Add more/your own role validation here. The *rules* must be documented
-// and the client-side validation should match these rules.
+// Role validation
+// Role must be a number between 1 and 3
+// 1: Admin, 2: Mod, 3: User
 const isValidRole = (priority: string): boolean =>
     validationFunctions.isNumberProvided(priority) &&
     parseInt(priority) >= 1 &&
-    parseInt(priority) <= 5;
+    parseInt(priority) <= 3;
 
-// Add more/your own email validation here. The *rules* must be documented
-// and the client-side validation should match these rules.
+// Email validation
+// Email must be a valid email address
 const isValidEmail = (email: string): boolean =>
-    isStringProvided(email) && email.includes('@');
+    isStringProvided(email) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 // middleware functions may be defined elsewhere!
 const emailMiddlewareCheck = (
@@ -56,8 +63,7 @@ const emailMiddlewareCheck = (
         next();
     } else {
         response.status(400).send({
-            message:
-                'Invalid or missing email - please refer to documentation',
+            message: 'Invalid or missing email - please refer to documentation',
         });
     }
 };
@@ -65,8 +71,20 @@ const emailMiddlewareCheck = (
 /**
  * @api {post} /register Request to register a user
  *
- * @apiDescription Document this route. !** TEST POST PLEASE IGNORE WILL REVERT Document the password rules here**!
- * !**Document the role rules here**!
+ * @apiDescription Password rules:
+ * - Must be at least 8 characters long
+ * - Must contain at least one special character
+ * - Must contain at least one capital letter
+ * - Must contain at least one number
+ * Phone rules:
+ * - Must be a valid phone number
+ * - Must be at least 10 characters long
+ * - Must contain only numbers - no dashes or parentheses
+ * Role rules:
+ * - Must be a number between 1 and 3
+ * - 1: Admin
+ * - 2: Moderator
+ * - 3: User
  *
  * @apiName PostRegister
  * @apiGroup Auth
@@ -76,7 +94,7 @@ const emailMiddlewareCheck = (
  * @apiBody {String} email a users email *unique
  * @apiBody {String} password a users password
  * @apiBody {String} username a username *unique
- * @apiBody {String} role a role for this user [1-5]
+ * @apiBody {String} role a role for this user [1-3]
  * @apiBody {String} phone a phone number for this user
  *
  * @apiSuccess (Success 201) {string} accessToken a newly created JWT
