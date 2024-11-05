@@ -84,9 +84,9 @@ const emailMiddlewareCheck = (
  * - Must contain only numbers - no dashes or parentheses
  * Role rules:
  * - Must be a number between 1 and 3
- * - 1: Admin
- * - 2: Moderator
- * - 3: User
+ * - 1: Admin - access to all functions
+ * - 2: Moderator - can add and edit data
+ * - 3: User - can view data and add ratings
  *
  * @apiName PostRegister
  * @apiGroup Auth
