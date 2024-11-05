@@ -51,7 +51,12 @@ const isValidRole = (priority: string): boolean =>
 // Email validation
 // Email must be a valid email address
 const isValidEmail = (email: string): boolean =>
-    isStringProvided(email) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    isStringProvided(email) &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+    (email.endsWith('.com') ||
+        email.endsWith('.edu') ||
+        email.endsWith('.net') ||
+        email.endsWith('.org'));
 
 // middleware functions may be defined elsewhere!
 const emailMiddlewareCheck = (
@@ -78,6 +83,8 @@ const emailMiddlewareCheck = (
  * - Must contain at least one special character
  * - Must contain at least one capital letter
  * - Must contain at least one number
+ * Email rules:
+ * - Must be a valid email address ending in .com, .edu, .net, or .org
  * Phone rules:
  * - Must be a valid phone number
  * - Must be at least 10 characters long
@@ -102,11 +109,11 @@ const emailMiddlewareCheck = (
  * @apiSuccess (Success 201) {string} accessToken a newly created JWT
  * @apiSuccess (Success 201) {number} id unique user id
  *
- * @apiError (400: Missing Parameters) {String} message "Missing required information"
- * @apiError (400: Invalid Password) {String} message "Invalid or missing password  - please refer to documentation"
- * @apiError (400: Invalid Phone) {String} message "Invalid or missing phone number  - please refer to documentation"
- * @apiError (400: Invalid Email) {String} message "Invalid or missing email  - please refer to documentation"
- * @apiError (400: Invalid Role) {String} message "Invalid or missing role  - please refer to documentation"
+ * @apiError (400: Missing Parameters) {String} message "Missing name or username"
+ * @apiError (400: Invalid Password) {String} message "Invalid or missing password - please refer to documentation"
+ * @apiError (400: Invalid Phone) {String} message "Invalid or missing phone number - please refer to documentation"
+ * @apiError (400: Invalid Email) {String} message "Invalid or missing email - please refer to documentation"
+ * @apiError (400: Invalid Role) {String} message "Invalid or missing role - please refer to documentation"
  * @apiError (400: Username exists) {String} message "Username exists"
  * @apiError (400: Email exists) {String} message "Email exists"
  *
@@ -125,7 +132,7 @@ registerRouter.post(
             next();
         } else {
             response.status(400).send({
-                message: 'Missing required information',
+                message: 'Missing name or username',
             });
         }
     },
@@ -136,7 +143,7 @@ registerRouter.post(
         } else {
             response.status(400).send({
                 message:
-                    'Invalid or missing phone number  - please refer to documentation',
+                    'Invalid or missing phone number - please refer to documentation',
             });
             return;
         }
@@ -147,7 +154,7 @@ registerRouter.post(
         } else {
             response.status(400).send({
                 message:
-                    'Invalid or missing password  - please refer to documentation',
+                    'Invalid or missing password - please refer to documentation',
             });
         }
     },
@@ -157,7 +164,7 @@ registerRouter.post(
         } else {
             response.status(400).send({
                 message:
-                    'Invalid or missing role  - please refer to documentation',
+                    'Invalid or missing role - please refer to documentation',
             });
         }
     },
@@ -172,7 +179,7 @@ registerRouter.post(
             request.body.phone,
             request.body.role,
         ];
-        console.dir({ ...request.body, password: '******' });
+        // console.dir({ ...request.body, password: '******' });
         pool.query(theQuery, values)
             .then((result) => {
                 //stash the account_id into the request object to be used in the next function
