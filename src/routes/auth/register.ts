@@ -71,7 +71,9 @@ const emailMiddlewareCheck = (
 /**
  * @api {post} /register Request to register a user
  *
- * @apiDescription Password rules:
+ * @apiDescription To register a user, you must provide the following information:
+ * First name, last name, email, password, username, role, and phone number.
+ * Password rules:
  * - Must be at least 8 characters long
  * - Must contain at least one special character
  * - Must contain at least one capital letter
