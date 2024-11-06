@@ -24,10 +24,9 @@ CREATE TABLE Account_Credential (Credential_ID SERIAL PRIMARY KEY,
 );
 
 CREATE TABLE BOOKS (id INT PRIMARY KEY,
-        isbn13 BIGINT,
+        isbn13 BIGINT UNIQUE,
         authors TEXT,
         publication_year INT,
-        original_title TEXT,
         title TEXT,
         rating_avg FLOAT,
         rating_count INT,
