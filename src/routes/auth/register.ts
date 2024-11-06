@@ -38,7 +38,7 @@ const isValidPassword = (password: string): boolean =>
 // Phone number validation
 // Phone number must be at least 10 characters long and contain only numbers
 const isValidPhone = (phone: string): boolean =>
-    isNumberProvided(phone) && phone.length >= 10;
+    validationFunctions.isNumberProvided(phone) && phone.length >= 10;
 
 // Role validation
 // Role must be a number between 1 and 3
@@ -78,17 +78,21 @@ const emailMiddlewareCheck = (
  *
  * @apiDescription To register a user, you must provide the following information:
  * First name, last name, email, password, username, role, and phone number.
+ *
  * Password rules:
  * - Must be at least 8 characters long
  * - Must contain at least one special character
  * - Must contain at least one capital letter
  * - Must contain at least one number
+ *
  * Email rules:
  * - Must be a valid email address ending in .com, .edu, .net, or .org
+ *
  * Phone rules:
  * - Must be a valid phone number
  * - Must be at least 10 characters long
  * - Must contain only numbers - no dashes or parentheses
+ *
  * Role rules:
  * - Must be a number between 1 and 3
  * - 1: Admin - access to all functions
@@ -104,7 +108,7 @@ const emailMiddlewareCheck = (
  * @apiBody {String} password a users password
  * @apiBody {String} username a username *unique
  * @apiBody {String} role a role for this user [1-3]
- * @apiBody {String} phone a phone number for this user
+ * @apiBody {String} phone a phone number for this user *unique
  *
  * @apiSuccess (Success 201) {string} accessToken a newly created JWT
  * @apiSuccess (Success 201) {number} id unique user id
@@ -116,6 +120,7 @@ const emailMiddlewareCheck = (
  * @apiError (400: Invalid Role) {String} message "Invalid or missing role - please refer to documentation"
  * @apiError (400: Username exists) {String} message "Username exists"
  * @apiError (400: Email exists) {String} message "Email exists"
+ * @apiError (400: Phone exists) {String} message "Phone number exists"
  *
  */
 registerRouter.post(
@@ -198,6 +203,10 @@ registerRouter.post(
                     response.status(400).send({
                         message: 'Email exists',
                     });
+                } else if (error.constraint == 'account_phone_key') {
+                    response.status(400).send({
+                        message: 'Phone number exists',
+                    });
                 } else {
                     //log the error
                     console.error('DB Query error on register');
@@ -243,7 +252,11 @@ registerRouter.post(
                  * without a PWD! That implementation is up to you if you want to add
                  * that step.
                  **********************************************************************/
-
+                // Done, deletes user with failed add
+                const theQuery =
+                    'DELETE FROM Account WHERE Username = $1 AND Email = $2';
+                const values = [request.body.username, request.body.email];
+                pool.query(theQuery, values);
                 //log the error
                 console.error('DB Query error on register');
                 console.error(error);

@@ -22,8 +22,8 @@ export const checkToken = (
             token = token.slice(7, token.length);
         }
 
-        jwt.verify(token, config.secret, (err, decoded: JwtPayload) => {
-            if (err) {
+        jwt.verify(token, config.secret, (error, decoded: JwtPayload) => {
+            if (error) {
                 return response.status(403).json({
                     success: false,
                     message: 'Token is not valid',
