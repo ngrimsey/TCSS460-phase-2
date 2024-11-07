@@ -368,7 +368,7 @@ messageRouter.delete(
  */
 messageRouter.delete('/:name', (request: Request, response: Response) => {
     const theQuery = 'DELETE FROM Demo  WHERE name = $1 RETURNING *';
-    const values = [request.params.name];
+    const values = [request.params.name.slice(1)]; // We remove the leading ':' character
 
     pool.query(theQuery, values)
         .then((result) => {
