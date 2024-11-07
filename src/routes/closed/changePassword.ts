@@ -47,7 +47,7 @@ const isValidPassword = (password: string): boolean =>
  * - Requires the user's current password
  *
  * @apiName ClosedPostPassword
- * @apiGroup *Closed
+ * @apiGroup Closed
  *
  * @apiUse JWT
  *
@@ -63,7 +63,7 @@ const isValidPassword = (password: string): boolean =>
  * @apiError (400: Invalid Credentials) {String} message "Credentials did not match"
  */
 pwRouter.post(
-    '/newPassword',
+    '/changePassword',
     (request: Request, response: Response, next: NextFunction) => {
         if (isStringProvided(request.body.currentpassword)) {
             next();
@@ -105,7 +105,8 @@ pwRouter.post(
                         'DB Query error on sign in: too many results returned'
                     );
                     response.status(500).send({
-                        message: 'server error - contact support',
+                        message:
+                            'server error - contact support (too many results returned)',
                     });
                     return;
                 }
@@ -164,11 +165,11 @@ pwRouter.post(
                 console.error('DB Query error on sign in');
                 console.error(error);
                 response.status(500).send({
-                    message: 'server error - contact support',
+                    message: 'server error 2 - contact support',
                 });
             });
     }
 );
 
 // "return" the router
-export { pwRouter as messageRouter };
+export { pwRouter };
