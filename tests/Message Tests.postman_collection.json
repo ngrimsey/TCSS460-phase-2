@@ -1,0 +1,1145 @@
+{
+	"info": {
+		"_postman_id": "07141897-378f-4e1b-b96c-efb6c87da9bc",
+		"name": "Message Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38936981",
+		"_collection_link": "https://tcss460-group-1.postman.co/workspace/TCSS460-Group-1~25d99b7c-ba1d-48c6-8df0-57753de15649/collection/38936981-07141897-378f-4e1b-b96c-efb6c87da9bc?action=share&source=collection_link&creator=38936981"
+	},
+	"item": [
+		{
+			"name": "Message -  Request to add an entry - Create New Message/User Copy (Alice 3_",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry).to.equal(\"{3} - [\" +pm.variables.get(\"usernameA\") +\"] says: \"+pm.variables.get(\"testMessage\"));",
+							"",
+							"});",
+							"",
+							"pm.test(\"Message entry successful\", () => {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"{{usernameA}}\",\n    \"message\": \"{{testMessage}}\",\n    \"priority\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message -  Request to add an entry - Create New Message/User Copy (Bob 2)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry).to.equal(\"{2} - [\" +pm.variables.get(\"usernameB\") +\"] says: \"+pm.variables.get(\"testMessage2\"));",
+							"",
+							"});",
+							"",
+							"pm.test(\"Message entry successful\", () => {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"{{usernameB}}\",\n    \"message\": \"{{testMessage2}}\",\n    \"priority\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to add an entry - Name Exists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message entry unsuccessful\", () => {",
+							"    pm.response.to.not.have.status(201);",
+							"})",
+							"",
+							"pm.test(\"Name exists\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"{{usernameA}}\",\n    \"message\": \"{{testMessage}}\",\n    \"priority\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to all retrieve entries",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message request successful\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"Recieved expected message entries\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entries\");",
+							"    pm.expect(response.entries.length).to.equal(2);",
+							"    pm.expect(response.entries[0]).to.equal(\"{3} - [Alice] says: This is a message\");",
+							"    pm.expect(response.entries[1]).to.equal(\"{2} - [Bob] says: This is another message\");",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message/all",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to retrieve entries by priority 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message request successful\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"Recieved only expected message entry\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entries\");",
+							"    pm.expect(response.entries.length).to.equal(1);",
+							"    pm.expect(response.entries[0].priority).to.equal(2)",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"priority\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message?priority=2",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to retrieve entries by priority 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message request successful\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"Recieved only expected message entry\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entries\");",
+							"    pm.expect(response.entries.length).to.equal(1);",
+							"    pm.expect(response.entries[0].priority).to.equal(3)",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"priority\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message?priority=3",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to retrieve entries by (invalid) priority",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message request successful\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})",
+							"",
+							"pm.test(\"Recieved invalid or missing message\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing Priority - please refer to documentation\");",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"priority\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message?priority=5",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to retrieve entries by priority - no messages",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message not found\", () => {",
+							"    pm.response.to.have.status(404);",
+							"})",
+							"",
+							"pm.test(\"Recieved no messages found message\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"No Priority 1 messages found\");",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"priority\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message?priority=1",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to retrieve an entry by name (Alice)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message is found\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"Recieved message entry\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry.name).to.equal(pm.variables.get(\"usernameA\"));",
+							"    pm.expect(response.entry.message).to.equal(pm.variables.get(\"testMessage\"));",
+							"    pm.expect(response.entry.priority).to.equal(3);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message/:{{usernameA}}",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message",
+						":{{usernameA}}"
+					],
+					"variable": [
+						{
+							"key": "{{usernameA}}",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to retrieve an entry by name (Bob)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message is found\", () => {",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test(\"Recieved message entry\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry.name).to.equal(pm.variables.get(\"usernameB\"));",
+							"    pm.expect(response.entry.message).to.equal(pm.variables.get(\"testMessage2\"));",
+							"    pm.expect(response.entry.priority).to.equal(2);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message/:{{usernameB}}",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message",
+						":{{usernameB}}"
+					],
+					"variable": [
+						{
+							"key": "{{usernameB}}",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to retrieve an entry by (invalid) name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Message is found\", () => {",
+							"    pm.response.to.have.status(404);",
+							"})",
+							"",
+							"pm.test(\"Recieved \\\"Name not found\\\" message \", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Name not found\");",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message/:Invalid",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message",
+						":Invalid"
+					],
+					"variable": [
+						{
+							"key": "Invalid",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to change an entry (Alice)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Success 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry).to.equal(\"Updated: {3} - [\"+pm.variables.get(\"usernameA\") +\"] says: \" + \"this is a changed message\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{usernameA}}\",\n    \"message\": \"this is a changed message\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to change an (invalid) entry",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fails 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Name not found\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"invalid\",\n    \"message\": \"this is a changed message\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to change an entry (Missing Name)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fails 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Missing required information - name\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message\": \"this is a changed message\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to change an entry (Missing Message)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fails 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Missing required information - message\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Alice\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to change an entry (Missing both)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fails 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Missing required information - name + message\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to remove entries by priority (2)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Returned deleted message\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entries\");",
+							"    pm.expect(response.entries.length).to.equal(1);",
+							"    pm.expect(response.entries[0]).to.equal(\"{2} - [Bob] says: This is another message\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message?priority=2",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to remove entries by (invalid) priority",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400: Invalid or missing Priority\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Returned invalid or missing priority message\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing Priority - please refer to documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message?priority=5",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to remove entries by (missing) priority",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400: Invalid or missing Priority\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Returned invalid or missing priority message\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing Priority - please refer to documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "5",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to remove entries by (empty) priority",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404: No messages\", () => {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Returned no priority message\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"No Priority 1 messages found\");",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message?priority=1",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to remove an entry by name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Returned no priority message\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry).to.equal(\"Deleted: {3} - [Alice] says: this is a changed message\");",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message/:Alice",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message",
+						":Alice"
+					],
+					"variable": [
+						{
+							"key": "Alice",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message - Request to remove an entry by (invalid) name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404: Name Not Found\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Returned no priority message\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Name not found\");",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/message/:invalid",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"message",
+						":invalid"
+					],
+					"variable": [
+						{
+							"key": "invalid",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "usernameA",
+			"value": "Alice",
+			"type": "string"
+		},
+		{
+			"key": "usernameB",
+			"value": "Bob",
+			"type": "string"
+		},
+		{
+			"key": "testMessage",
+			"value": "This is a message",
+			"type": "string"
+		},
+		{
+			"key": "testMessage2",
+			"value": "This is another message",
+			"type": "string"
+		}
+	]
+}
