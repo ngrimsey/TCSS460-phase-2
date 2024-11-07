@@ -24,14 +24,11 @@ jobs:
               run: apidoc -o temp_docs/
 
             - name: Deploy to gh-pages
-              env:
-                  GH_TOKEN: ${{ secrets.GH_TOKEN }}
               run: |
                   # Configure git with token-based authentication
                   git config --global user.name "github-actions[bot]"
                   git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                  git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
-
+                  git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
                   # Check if gh-pages branch exists, and switch to it or create it
                   if git show-ref --quiet refs/heads/gh-pages; then
                     git checkout gh-pages
