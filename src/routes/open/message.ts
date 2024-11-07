@@ -42,10 +42,17 @@ function mwValidNameMessageBody(
     ) {
         next();
     } else {
-        console.error('Missing required information');
+        // TODO: JA - Maybe we could break this out into a helper function
+        const hasName = isStringProvided(request.body.name);
+        const hasMsg = isStringProvided(request.body.message);
+        console.error('Missing required information - hasName (' + hasName + ") hasMsg (" + hasMsg + ")");
+        let respMsg = "Missing required information - "
+        if (!hasName) respMsg += "name";
+        if (!hasName && !hasMsg) respMsg += " + message";
+        if (hasName) respMsg += "message"
         response.status(400).send({
             message:
-                'Missing required information - please refer to documentation',
+                respMsg,
         });
     }
 }
@@ -71,7 +78,7 @@ function mwValidNameMessageBody(
  *      "{<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (400: Name exists) {String} message "Name exists"
- * @apiError (400: Missing Parameters) {String} message "Missing required information - please refer to documentation"
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - [<code>paramater(s)</code>]"
  * @apiError (400: Invalid Priority) {String} message "Invalid or missing Priority  - please refer to documentation"
  * @apiUse JSONError
  */
@@ -271,7 +278,7 @@ messageRouter.get('/:name', (request: Request, response: Response) => {
  *      "Updated: {<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (404: Name Not Found) {String} message "Name not found"
- * @apiError (400: Missing Parameters) {String} message "Missing required information" *
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - [<code>paramater(s)</code>]"
  * @apiUse JSONError
  */
 messageRouter.put(
