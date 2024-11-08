@@ -2,4 +2,6 @@ import { checkToken } from './jwt';
 
 import { checkParamsIdToJwtId } from './verificationChecks';
 
-export { checkToken, checkParamsIdToJwtId };
+import { validateBodyParamStrings } from './paramaterChecks';
+
+export { checkToken, checkParamsIdToJwtId, validateBodyParamStrings };

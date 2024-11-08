@@ -2,9 +2,13 @@ import express, { Router } from 'express';
 
 import { checkToken } from '../../core/middleware';
 import { tokenTestRouter } from './tokenTest';
+import { bookRouter } from './books';
+import { messageRouter } from './closed_message';
 
 const closedRoutes: Router = express.Router();
 
-closedRoutes.use(checkToken, tokenTestRouter);
+closedRoutes.use('/books',checkToken, bookRouter);
+closedRoutes.use('/jwt_test', checkToken, tokenTestRouter);
+closedRoutes.use('/c/message', checkToken, messageRouter);
 
 export { closedRoutes };
