@@ -183,11 +183,11 @@ messageRouter.get('/cursor', async (request: Request, response: Response) => {
  * @apiBody {string} message a message to store with the name
  * @apiBody {number} priority a message priority [1-3]
  *
- * @apiSuccess {Object} entry the message entry objects of all entries
- * @apiSuccess {string} entry.name <code>name</code>
- * @apiSuccess {string} entry.message The message associated with <code>name</code>
- * @apiSuccess {number} entry.priority The priority associated with <code>name</code>
- * @apiSuccess {string} entry.formatted the entry as the following string:
+ * @apiSuccess (Success 201) {Object} entry the message entry objects of all entries
+ * @apiSuccess (Success 201) {string} entry.name <code>name</code>
+ * @apiSuccess (Success 201) {string} entry.message The message associated with <code>name</code>
+ * @apiSuccess (Success 201) {number} entry.priority The priority associated with <code>name</code>
+ * @apiSuccess (Success 201) {string} entry.formatted the entry as the following string:
  *      "{<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (400: Name exists) {String} message "Name exists"
@@ -228,8 +228,6 @@ messageRouter.post(
         }
     },
     async (request: Request, response: Response) => {
-        //We're using placeholders ($1, $2, $3) in the SQL query string to avoid SQL Injection
-        //If you want to read more: https://stackoverflow.com/a/8265319
         const theQuery =
             'INSERT INTO DEMO(Name, Message, Priority) VALUES ($1, $2, $3) RETURNING *';
         const values = [
@@ -240,8 +238,6 @@ messageRouter.post(
 
         try {
             const result = await pool.query(theQuery, values);
-            // result.rows array are the records returned from the SQL statement.
-            // An INSERT statement will return a single row, the row that was inserted.
             response.status(201).send({
                 entry: format(result.rows[0]),
             });
