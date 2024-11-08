@@ -34,6 +34,23 @@ function isNumberProvided(candidate: any): boolean {
 }
 
 /**
+ * Checks the parameter to see if it is a valid password.
+ *
+ * @param {any} candidate the value to check
+ * @returns true if the parameter is a valid password, false otherwise
+ */
+function isValidPassword(candidate: any): boolean {
+    return (
+        isStringProvided(candidate) &&
+        candidate.length > 7 &&
+        /[!@#$%^&*]/.test(candidate) &&
+        /[A-Z]/.test(candidate) &&
+        /[a-z]/.test(candidate) &&
+        /[0-9]/.test(candidate)
+    );
+}
+
+/**
  * Helper
  * @param x data value to check the type of
  * @returns true if the type of x is a number, false otherise
@@ -42,13 +59,10 @@ function isNumber(x: any): x is number {
     return typeof x === 'number';
 }
 
-// Feel free to add your own validations functions!
-// for example: isNumericProvided, isValidPassword, isValidEmail, etc
-// don't forget to export any
-
 const validationFunctions = {
     isStringProvided,
     isNumberProvided,
+    isValidPassword,
 };
 
 export { validationFunctions };

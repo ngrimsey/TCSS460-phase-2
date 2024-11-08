@@ -15,6 +15,7 @@ import {
 
 const isStringProvided = validationFunctions.isStringProvided;
 const isNumberProvided = validationFunctions.isNumberProvided;
+const isValidPassword = validationFunctions.isValidPassword;
 const generateHash = credentialingFunctions.generateHash;
 const generateSalt = credentialingFunctions.generateSalt;
 
@@ -27,13 +28,13 @@ export interface IUserRequest extends Request {
 // Password validation
 // Password must be at least 8 characters long and contain at least one
 // uppercase letter, one lowercase letter, one number, and one special character(!, @, #, $, %, ^, &, *)
-const isValidPassword = (password: string): boolean =>
-    isStringProvided(password) &&
-    password.length > 7 &&
-    /[!@#$%^&*]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password);
+// const isValidPassword = (password: string): boolean =>
+//     isStringProvided(password) &&
+//     password.length > 7 &&
+//     /[!@#$%^&*]/.test(password) &&
+//     /[A-Z]/.test(password) &&
+//     /[a-z]/.test(password) &&
+//     /[0-9]/.test(password);
 
 // Phone number validation
 // Phone number must be at least 10 characters long and contain only numbers

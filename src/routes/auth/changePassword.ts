@@ -1,29 +1,21 @@
 //express is the framework we're going to use to handle requests
-import express, { NextFunction, Request, Response, Router } from 'express';
+import express, { NextFunction, Response, Router } from 'express';
+
 //Access the connection to Postgres Database
 import {
     pool,
     validationFunctions,
     credentialingFunctions,
 } from '../../core/utilities';
+
 import { IJwtRequest } from '../../core/models';
 
 const pwRouter: Router = express.Router();
 
 const isStringProvided = validationFunctions.isStringProvided;
+const isValidPassword = validationFunctions.isValidPassword;
 const generateHash = credentialingFunctions.generateHash;
 const generateSalt = credentialingFunctions.generateSalt;
-
-// Password validation
-// Password must be at least 8 characters long and contain at least one
-// uppercase letter, one lowercase letter, one number, and one special character(!, @, #, $, %, ^, &, *)
-const isValidPassword = (password: string): boolean =>
-    isStringProvided(password) &&
-    password.length > 7 &&
-    /[!@#$%^&*]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password);
 
 /**
  * @apiDefine JWT
@@ -31,10 +23,10 @@ const isValidPassword = (password: string): boolean =>
  */
 
 /**
- * @api {put} /c/changePassword Request to change a user's password
+ * @api {put} /changePassword Request to change a user's password
  *
  * @apiDescription Request to change a user's password in the DB
- * - Requires a JWT obtained from /auth/login
+ * - Requires a valid JWT obtained from /auth/login or /auth/register
  * - Requires the user's current password and the desired new password
  *
  * Password rules:
@@ -43,8 +35,8 @@ const isValidPassword = (password: string): boolean =>
  * - Must contain at least one capital letter
  * - Must contain at least one number
  *
- * @apiName ClosedPutPassword
- * @apiGroup Closed
+ * @apiName AuthPutPassword
+ * @apiGroup Auth
  *
  * @apiUse JWT
  *
@@ -56,7 +48,7 @@ const isValidPassword = (password: string): boolean =>
  * @apiError (400: Missing currrent password) {String} message "Missing current password - please refer to documentation"
  * @apiError (400: Invalid Password) {String} message "Invalid or missing new password  - please refer to documentation"
  * @apiError (404: User Not Found) {String} message "User not found"
- * @apiError (400: Invalid Credentials) {String} message "Credentials did not match"
+ * @apiError (400: Invalid Credentials) {String} message "Incorrect password"
  */
 
 pwRouter.put(
@@ -122,16 +114,16 @@ pwRouter.put(
                 //Did our salted hash match their salted hash?
                 if (storedSaltedHash === providedSaltedHash) {
                     //credentials match. Salt and hash the new password
-                    const newSalt = generateSalt(32);
-                    const newSaltedHash = generateHash(
-                        request.body.newPassword,
-                        newSalt
+                    const salt = generateSalt(32);
+                    const saltedHash = generateHash(
+                        request.body.newpassword,
+                        salt
                     );
                     // Update the user's password information
-                    const theNextQuery =
+                    const theQuery =
                         'UPDATE Account_Credential SET salted_hash = $1, salt = $2 WHERE account_id = $3';
-                    const newValues = [newSaltedHash, newSalt, theID];
-                    pool.query(theNextQuery, newValues)
+                    const values = [saltedHash, salt, theID];
+                    pool.query(theQuery, values)
                         .then(() => {
                             response.status(204).send();
                         })
@@ -144,9 +136,9 @@ pwRouter.put(
                             });
                         });
                 } else {
-                    //credentials dod not match
+                    //credentials did not match
                     response.status(400).send({
-                        message: 'Credentials did not match!',
+                        message: 'Incorrect password',
                     });
                 }
             })
@@ -162,4 +154,4 @@ pwRouter.put(
 );
 
 // "return" the router
-export { pwRouter };
+export { pwRouter as changePWRouter };
