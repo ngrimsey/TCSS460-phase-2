@@ -30,16 +30,8 @@ const key = {
     secret: process.env.JSON_WEB_TOKEN,
 };
 
-// const isValidPassword = (password: string): boolean =>
-//     isStringProvided(password) &&
-//     password.length > 7 &&
-//     /[!@#$%^&*]/.test(password) &&
-//     /[A-Z]/.test(password) &&
-//     /[a-z]/.test(password) &&
-//     /[0-9]/.test(password);
-
 /**
- * @api {put} /login Request to reset a user's password
+ * @api {put} /resetPW Request to reset a user's password
  *
  * @apiDescription Request to reset a user's password while logged out
  * - Requires the user's current email and username, and the desired new password
@@ -67,8 +59,9 @@ const key = {
  */
 
 resetPWRouter.put(
-    '/reset',
+    '/resetPW',
     (request: AuthRequest, response: Response, next: NextFunction) => {
+        // Check if the email and username are provided
         if (
             isStringProvided(request.body.email) &&
             isStringProvided(request.body.username)
@@ -81,6 +74,7 @@ resetPWRouter.put(
         }
     },
     (request: AuthRequest, response: Response, next: NextFunction) => {
+        // Check if the password is valid
         if (isValidPassword(request.body.password)) {
             next();
         } else {
@@ -90,6 +84,7 @@ resetPWRouter.put(
         }
     },
     (request: AuthRequest, response: Response) => {
+        // Check if the user exists
         const theQuery = `SELECT salted_hash, salt, Account_Credential.account_id, account.email, account.firstname, account.lastname, account.phone, account.username, account.account_role FROM Account_Credential
                       INNER JOIN Account ON
                       Account_Credential.account_id = Account.account_id 
@@ -112,6 +107,7 @@ resetPWRouter.put(
                     });
                     return;
                 }
+                // If credentials match, update the password
                 const userID = result.rows[0].account_id;
                 const salt = generateSalt(32);
                 const saltedHash = generateHash(request.body.password, salt);
