@@ -175,7 +175,7 @@ messageRouter.get('/cursor', async (request: Request, response: Response) => {
  * @apiDescription Request to add a message and someone's name to the DB
  *
  * @apiName ClosedPostMessage
- * @apiGroup *Closed Message
+ * @apiGroup Message (Closed)
  *
  * @apiUse JWT
  *
@@ -269,7 +269,7 @@ messageRouter.post(
  * @apiDescription Request to remove an entry associated with <code>name</code> in the DB
  *
  * @apiName ClosedDeleteMessage
- * @apiGroup *Closed Message
+ * @apiGroup Message (Closed)
  *
  * @apiUse JWT
  *
