@@ -8,15 +8,6 @@ import {
 } from '../../core/utilities';
 import { IJwtRequest } from '../../core/models';
 
-export interface Auth {
-    email: string;
-    password: string;
-}
-
-export interface AuthRequest extends Request {
-    auth: Auth;
-}
-
 const pwRouter: Router = express.Router();
 
 const isStringProvided = validationFunctions.isStringProvided;
@@ -40,13 +31,19 @@ const isValidPassword = (password: string): boolean =>
  */
 
 /**
- * @api {post} /c/changePassword Request to change a user's password
+ * @api {put} /c/changePassword Request to change a user's password
  *
  * @apiDescription Request to change a user's password in the DB
  * - Requires a JWT obtained from /auth/login
- * - Requires the user's current password
+ * - Requires the user's current password and the desired new password
  *
- * @apiName ClosedPostPassword
+ * Password rules:
+ * - Must be at least 8 characters long
+ * - Must contain at least one special character
+ * - Must contain at least one capital letter
+ * - Must contain at least one number
+ *
+ * @apiName ClosedPutPassword
  * @apiGroup Closed
  *
  * @apiUse JWT
@@ -54,17 +51,17 @@ const isValidPassword = (password: string): boolean =>
  * @apiBody {string} currentpassword the user's current password
  * @apiBody {string} newpassword the user's new password
  *
- * @apiSuccess {String} message "Password changed successfully"
+ * @apiSuccess (204: Password changed successfully) {void} - no content
  *
  * @apiError (400: Missing currrent password) {String} message "Missing current password - please refer to documentation"
  * @apiError (400: Invalid Password) {String} message "Invalid or missing new password  - please refer to documentation"
- * @apiError (400: JSON Error) {String} message "malformed JSON in parameters"
  * @apiError (404: User Not Found) {String} message "User not found"
  * @apiError (400: Invalid Credentials) {String} message "Credentials did not match"
  */
-pwRouter.post(
+
+pwRouter.put(
     '/changePassword',
-    (request: Request, response: Response, next: NextFunction) => {
+    (request: IJwtRequest, response: Response, next: NextFunction) => {
         if (isStringProvided(request.body.currentpassword)) {
             next();
         } else {
@@ -74,7 +71,7 @@ pwRouter.post(
             });
         }
     },
-    (request: Request, response: Response, next: NextFunction) => {
+    (request: IJwtRequest, response: Response, next: NextFunction) => {
         if (isValidPassword(request.body.newpassword)) {
             next();
         } else {
@@ -86,12 +83,11 @@ pwRouter.post(
     },
     (request: IJwtRequest, response: Response) => {
         // use ID from JWT to get salt, use salt to test password
-        const theQuery = `SELECT salted_hash, salt, Account_Credential.account_id, 
+        const theID = request.claims.id;
+        const theQuery = `SELECT salted_hash, salt 
                       FROM Account_Credential
-                      INNER JOIN Account ON
-                      Account_Credential.account_id=Account.account_id 
-                      WHERE Account.account_id=$1`;
-        const values = [request.claims.id];
+                      WHERE account_id = $1`;
+        const values = [theID];
         pool.query(theQuery, values)
             .then((result) => {
                 if (result.rowCount == 0) {
@@ -131,32 +127,26 @@ pwRouter.post(
                         request.body.newPassword,
                         newSalt
                     );
-
-                    const theQuery =
-                        'UPDATE Account_Credential SET salted_hash = $2, salt = $3 WHERE account_id = $1';
-                    const values = [request.claims.id, newSaltedHash, newSalt];
-                    pool.query(theQuery, values).then(() => {
-                        // const accessToken = jwt.sign(
-                        //     {
-                        //         role: request.body.role,
-                        //         id: request.id,
-                        //     },
-                        //     key.secret,
-                        //     {
-                        //         expiresIn: '14 days', // expires in 14 days
-                        //     }
-                        // );
-                        //We successfully added the user!
-                        response.status(201).send({
-                            // accessToken,
-                            // id: request.id,
-                            message: 'Password changed successfully',
+                    // Update the user's password information
+                    const theNextQuery =
+                        'UPDATE Account_Credential SET salted_hash = $1, salt = $2 WHERE account_id = $3';
+                    const newValues = [newSaltedHash, newSalt, theID];
+                    pool.query(theNextQuery, newValues)
+                        .then(() => {
+                            response.status(204).send();
+                        })
+                        .catch((error) => {
+                            //log the error
+                            console.error('DB Query error on sign in');
+                            console.error(error);
+                            response.status(500).send({
+                                message: 'server error - contact support',
+                            });
                         });
-                    });
                 } else {
                     //credentials dod not match
                     response.status(400).send({
-                        message: 'Credentials did not match',
+                        message: 'Credentials did not match!',
                     });
                 }
             })
@@ -165,7 +155,7 @@ pwRouter.post(
                 console.error('DB Query error on sign in');
                 console.error(error);
                 response.status(500).send({
-                    message: 'server error 2 - contact support',
+                    message: 'server error - contact support',
                 });
             });
     }
