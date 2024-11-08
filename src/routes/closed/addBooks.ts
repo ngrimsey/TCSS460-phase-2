@@ -86,9 +86,6 @@ addBooksRouter.get('/test', (req, res) => {
  * @apiError (400: Invalid Published Year) {String} message "Invalid or missing Published Year - please refer to documentation"
  * @apiError (400: Invalid Original Title) {String} message "Invalid or missing Original Title - please refer to documentation"
  * @apiError (400: Invalid Title) {String} message "Invalid or missing Title - please refer to documentation"
- * @apiError (400: Username exists) {String} message "Username exists"
- * @apiError (400: Email exists) {String} message "Email exists"
- * @apiError (400: Phone exists) {String} message "Phone number exists"
  *
  */
 addBooksRouter.post(
