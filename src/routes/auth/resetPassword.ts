@@ -20,6 +20,7 @@ export interface AuthRequest extends Request {
 }
 
 const isStringProvided = validationFunctions.isStringProvided;
+const isValidPassword = validationFunctions.isValidPassword;
 const generateHash = credentialingFunctions.generateHash;
 const generateSalt = credentialingFunctions.generateSalt;
 
@@ -29,13 +30,13 @@ const key = {
     secret: process.env.JSON_WEB_TOKEN,
 };
 
-const isValidPassword = (password: string): boolean =>
-    isStringProvided(password) &&
-    password.length > 7 &&
-    /[!@#$%^&*]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password);
+// const isValidPassword = (password: string): boolean =>
+//     isStringProvided(password) &&
+//     password.length > 7 &&
+//     /[!@#$%^&*]/.test(password) &&
+//     /[A-Z]/.test(password) &&
+//     /[a-z]/.test(password) &&
+//     /[0-9]/.test(password);
 
 /**
  * @api {put} /login Request to reset a user's password
@@ -50,7 +51,7 @@ const isValidPassword = (password: string): boolean =>
  * - Must contain at least one number
  *
  * @apiName PutResetPassword
- * @apiGroup Open
+ * @apiGroup Auth
  *
  * @apiBody {String} email a user's email
  * @apiBody {String} username a user's username
@@ -146,4 +147,4 @@ resetPWRouter.put(
     }
 );
 
-export { resetPWRouter as signinRouter };
+export { resetPWRouter };

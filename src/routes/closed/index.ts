@@ -7,6 +7,5 @@ import { pwRouter } from './changePassword';
 const closedRoutes: Router = express.Router();
 
 closedRoutes.use(checkToken, tokenTestRouter, pwRouter);
-//'/jwt_test',
 
 export { closedRoutes };

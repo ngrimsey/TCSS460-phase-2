@@ -1,5 +1,5 @@
 //express is the framework we're going to use to handle requests
-import express, { NextFunction, Request, Response, Router } from 'express';
+import express, { NextFunction, Response, Router } from 'express';
 //Access the connection to Postgres Database
 import {
     pool,
@@ -11,19 +11,9 @@ import { IJwtRequest } from '../../core/models';
 const pwRouter: Router = express.Router();
 
 const isStringProvided = validationFunctions.isStringProvided;
+const isValidPassword = validationFunctions.isValidPassword;
 const generateHash = credentialingFunctions.generateHash;
 const generateSalt = credentialingFunctions.generateSalt;
-
-// Password validation
-// Password must be at least 8 characters long and contain at least one
-// uppercase letter, one lowercase letter, one number, and one special character(!, @, #, $, %, ^, &, *)
-const isValidPassword = (password: string): boolean =>
-    isStringProvided(password) &&
-    password.length > 7 &&
-    /[!@#$%^&*]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password);
 
 /**
  * @apiDefine JWT
@@ -56,7 +46,7 @@ const isValidPassword = (password: string): boolean =>
  * @apiError (400: Missing currrent password) {String} message "Missing current password - please refer to documentation"
  * @apiError (400: Invalid Password) {String} message "Invalid or missing new password  - please refer to documentation"
  * @apiError (404: User Not Found) {String} message "User not found"
- * @apiError (400: Invalid Credentials) {String} message "Credentials did not match"
+ * @apiError (400: Invalid Credentials) {String} message "Incorrect password"
  */
 
 pwRouter.put(
@@ -144,9 +134,9 @@ pwRouter.put(
                             });
                         });
                 } else {
-                    //credentials dod not match
+                    //credentials did not match
                     response.status(400).send({
-                        message: 'Credentials did not match!',
+                        message: 'Incorrect password',
                     });
                 }
             })
