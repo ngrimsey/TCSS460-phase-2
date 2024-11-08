@@ -31,31 +31,26 @@ function mwValidPriorityQuery(
     }
 }
 
-function mwValidNameMessageBody(
-    request: Request,
-    response: Response,
-    next: NextFunction
-) {
-    if (
-        isStringProvided(request.body.name) &&
-        isStringProvided(request.body.message)
-    ) {
-        next();
-    } else {
-        // TODO: JA - Maybe we could break this out into a helper function
-        const hasName = isStringProvided(request.body.name);
-        const hasMsg = isStringProvided(request.body.message);
-        console.error('Missing required information - hasName (' + hasName + ") hasMsg (" + hasMsg + ")");
-        let respMsg = "Missing required information - "
-        if (!hasName) respMsg += "name";
-        if (!hasName && !hasMsg) respMsg += " + message";
-        if (hasName) respMsg += "message"
-        response.status(400).send({
-            message:
-                respMsg,
-        });
+// Middleware to check if required params exist in req.body as strings TODO: JA - Export this?
+// Usage: validateBodyParamStrings["param1", "param2"]
+const validateBodyParamStrings = (requiredParams :string[]) => {
+  return (req :Request, res :Response, next :NextFunction) => {
+    const missingParams = [];
+
+    requiredParams.forEach(param => {
+      if (!isStringProvided(req.body[param])) {
+        missingParams.push(param);
+      }
+    });
+
+    if (missingParams.length > 0) {
+      const message = `Missing required information - ${missingParams.join(' + ')}`;
+      return res.status(400).json({ message });
     }
-}
+
+    next();
+  };
+};
 
 /**
  * @apiDefine JSONError
@@ -78,13 +73,13 @@ function mwValidNameMessageBody(
  *      "{<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (400: Name exists) {String} message "Name exists"
- * @apiError (400: Missing Parameters) {String} message "Missing required information - [<code>paramater(s)</code>]"
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - <code>paramater [+ another param]</code>"
  * @apiError (400: Invalid Priority) {String} message "Invalid or missing Priority  - please refer to documentation"
  * @apiUse JSONError
  */
 messageRouter.post(
     '/',
-    mwValidNameMessageBody,
+    validateBodyParamStrings(["name", "message"]),
     (request: Request, response: Response, next: NextFunction) => {
         const priority: string = request.body.priority as string;
         if (
@@ -278,12 +273,12 @@ messageRouter.get('/:name', (request: Request, response: Response) => {
  *      "Updated: {<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (404: Name Not Found) {String} message "Name not found"
- * @apiError (400: Missing Parameters) {String} message "Missing required information - [<code>paramater(s)</code>]"
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - <code>paramater [+ another param]</code>"
  * @apiUse JSONError
  */
 messageRouter.put(
     '/',
-    mwValidNameMessageBody,
+    validateBodyParamStrings(["name", "message"]),
     (request: Request, response: Response, next: NextFunction) => {
         const theQuery =
             'UPDATE Demo SET message = $1 WHERE name = $2 RETURNING *';

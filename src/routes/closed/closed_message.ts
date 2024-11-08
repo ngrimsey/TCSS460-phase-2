@@ -12,6 +12,26 @@ const format = (resultRow) => ({
 
 const isStringProvided = validationFunctions.isStringProvided;
 const isNumberProvided = validationFunctions.isNumberProvided;
+// Middleware to check if required params exist in req.body as strings TODO: JA - Export this?
+// Usage: validateBodyParamStrings["param1", "param2"]
+const validateBodyParamStrings = (requiredParams :string[]) => {
+  return (req :Request, res :Response, next :NextFunction) => {
+    const missingParams = [];
+
+    requiredParams.forEach(param => {
+      if (!isStringProvided(req.body[param])) {
+        missingParams.push(param);
+      }
+    });
+
+    if (missingParams.length > 0) {
+      const message = `Missing required information - ${missingParams.join(' + ')}`;
+      return res.status(400).json({ message });
+    }
+
+    next();
+  };
+};
 
 /**
  * @apiDefine JWT
@@ -191,26 +211,15 @@ messageRouter.get('/cursor', async (request: Request, response: Response) => {
  *      "{<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (400: Name exists) {String} message "Name exists"
- * @apiError (400: Missing Parameters) {String} message "Missing required information - please refer to documentation"
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - <code>paramater [+ another param]</code>"
  * @apiError (400: Invalid Priority) {String} message "Invalid or missing Priority  - please refer to documentation"
  * @apiError (400: JSON Error) {String} message "malformed JSON in parameters"
  */
+
+
 messageRouter.post(
     '/',
-    (request: Request, response: Response, next: NextFunction) => {
-        if (
-            isStringProvided(request.body.name) &&
-            isStringProvided(request.body.message)
-        ) {
-            next();
-        } else {
-            console.error('Missing required information');
-            response.status(400).send({
-                message:
-                    'Missing required information - please refer to documentation',
-            });
-        }
-    },
+    validateBodyParamStrings(["name", "message"]),
     (request: Request, response: Response, next: NextFunction) => {
         const priority: string = request.body.priority as string;
         if (
