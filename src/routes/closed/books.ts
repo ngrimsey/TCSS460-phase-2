@@ -33,7 +33,7 @@ bookRouter.get('/all', async (req: Request, res: Response) => {
 
     try {
         const query = `
-            SELECT * FROM books
+            SELECT * FROM BOOKS
             ORDER BY title
             LIMIT $1 OFFSET $2
         `;
@@ -44,12 +44,32 @@ bookRouter.get('/all', async (req: Request, res: Response) => {
     }
 });
 
-// Fetch a specific book by ISBN
+/**
+ * @api {get} /books/:isbn Get Book by ISBN
+ * @apiName GetBookByISBN
+ * @apiGroup Books
+ *
+ * @apiParam {String} isbn ISBN of the book.
+ *
+ * @apiSuccess {Number} id Book ID.
+ * @apiSuccess {String} title Title of the book.
+ * @apiSuccess {String} authors Authors of the book.
+ * @apiSuccess {Number} publication_year Publication year of the book.
+ * @apiSuccess {Number} rating_avg Average rating.
+ *
+ * @apiError {Object} 404 Book not found.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "Book not found"
+ *     }
+ * @apiError {Object} 500 Internal Server Error.
+ */
 bookRouter.get('/:isbn', async (req: Request, res: Response) => {
     const { isbn } = req.params;
 
     try {
-        const query = `SELECT * FROM books WHERE isbn13 = $1`;
+        const query = `SELECT * FROM BOOKS WHERE isbn13 = $1`;
         const result = await pool.query(query, [isbn]);
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Book not found' });
@@ -60,12 +80,30 @@ bookRouter.get('/:isbn', async (req: Request, res: Response) => {
     }
 });
 
-// Fetch books by author
+/**
+ * @api {get} /books/author/:author Get Books by Author
+ * @apiName GetBooksByAuthor
+ * @apiGroup Books
+ *
+ * @apiParam {String} author Author name to search for.
+ *
+ * @apiSuccess {Object[]} books List of books by the specified author.
+ * @apiSuccess {Number} books.id Book ID.
+ * @apiSuccess {String} books.title Title of the book.
+ * @apiSuccess {String} books.authors Authors of the book.
+ *
+ * @apiError {Object} 500 Internal Server Error.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "Error fetching books by author"
+ *     }
+ */
 bookRouter.get('/author/:author', async (req: Request, res: Response) => {
     const { author } = req.params;
 
     try {
-        const query = `SELECT * FROM books WHERE authors ILIKE $1`;
+        const query = `SELECT * FROM BOOKS  WHERE authors ILIKE $1`;
         const result = await pool.query(query, [`%${author}%`]);
         res.status(200).json(result.rows);
     } catch (error) {
@@ -73,12 +111,30 @@ bookRouter.get('/author/:author', async (req: Request, res: Response) => {
     }
 });
 
-// Fetch books by title
+/**
+ * @api {get} /books/title/:title Get Books by Title
+ * @apiName GetBooksByTitle
+ * @apiGroup Books
+ *
+ * @apiParam {String} title Title to search for.
+ *
+ * @apiSuccess {Object[]} books List of books with the specified title.
+ * @apiSuccess {Number} books.id Book ID.
+ * @apiSuccess {String} books.title Title of the book.
+ * @apiSuccess {String} books.authors Authors of the book.
+ *
+ * @apiError {Object} 500 Internal Server Error.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "Error fetching books by title"
+ *     }
+ */
 bookRouter.get('/title/:title', async (req: Request, res: Response) => {
     const { title } = req.params;
 
     try {
-        const query = `SELECT * FROM books WHERE title ILIKE $1`;
+        const query = `SELECT * FROM BOOKS WHERE title ILIKE $1`;
         const result = await pool.query(query, [`%${title}%`]);
         res.status(200).json(result.rows);
     } catch (error) {
@@ -86,12 +142,31 @@ bookRouter.get('/title/:title', async (req: Request, res: Response) => {
     }
 });
 
-// Fetch books by minimum rating
+/**
+ * @api {get} /books/rating/:rating Get Books by Minimum Rating
+ * @apiName GetBooksByRating
+ * @apiGroup Books
+ *
+ * @apiParam {Number} rating Minimum average rating to filter books by.
+ *
+ * @apiSuccess {Object[]} books List of books with an average rating above the specified value.
+ * @apiSuccess {Number} books.id Book ID.
+ * @apiSuccess {String} books.title Title of the book.
+ * @apiSuccess {String} books.authors Authors of the book.
+ * @apiSuccess {Number} books.rating_avg Average rating.
+ *
+ * @apiError {Object} 500 Internal Server Error.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "Error fetching books by rating"
+ *     }
+ */
 bookRouter.get('/rating/:rating', async (req: Request, res: Response) => {
     const minRating = parseFloat(req.params.rating);
 
     try {
-        const query = `SELECT * FROM books WHERE rating_avg >= $1`;
+        const query = `SELECT * FROM BOOKS  WHERE rating_count >= $1`;
         const result = await pool.query(query, [minRating]);
         res.status(200).json(result.rows);
     } catch (error) {
@@ -99,12 +174,31 @@ bookRouter.get('/rating/:rating', async (req: Request, res: Response) => {
     }
 });
 
-// Fetch books by publication year
+/**
+ * @api {get} /books/year/:year Get Books by Publication Year
+ * @apiName GetBooksByYear
+ * @apiGroup Books
+ *
+ * @apiParam {Number} year Publication year to filter books by.
+ *
+ * @apiSuccess {Object[]} books List of books published in the specified year.
+ * @apiSuccess {Number} books.id Book ID.
+ * @apiSuccess {String} books.title Title of the book.
+ * @apiSuccess {String} books.authors Authors of the book.
+ * @apiSuccess {Number} books.publication_year Publication year of the book.
+ *
+ * @apiError {Object} 500 Internal Server Error.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "Error fetching books by publication year"
+ *     }
+ */
 bookRouter.get('/year/:year', async (req: Request, res: Response) => {
     const publicationYear = parseInt(req.params.year);
 
     try {
-        const query = `SELECT * FROM books WHERE publication_year = $1`;
+        const query = `SELECT * FROM BOOKS WHERE publication_year = $1`;
         const result = await pool.query(query, [publicationYear]);
         res.status(200).json(result.rows);
     } catch (error) {
@@ -112,4 +206,4 @@ bookRouter.get('/year/:year', async (req: Request, res: Response) => {
     }
 });
 
-export default bookRouter;
+export  {bookRouter};
