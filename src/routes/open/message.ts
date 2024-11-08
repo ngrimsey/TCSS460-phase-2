@@ -2,10 +2,10 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 //Access the connection to Postgres Database
 import { pool, validationFunctions } from '../../core/utilities';
+// Reply with standardized message if missing paramaters
+import { validateBodyParamStrings } from '../../core/middleware';
 
 const messageRouter: Router = express.Router();
-
-const isStringProvided = validationFunctions.isStringProvided;
 
 const format = (resultRow) =>
     `{${resultRow.priority}} - [${resultRow.name}] says: ${resultRow.message}`;
@@ -30,27 +30,6 @@ function mwValidPriorityQuery(
         });
     }
 }
-
-// Middleware to check if required params exist in req.body as strings TODO: JA - Export this?
-// Usage: validateBodyParamStrings["param1", "param2"]
-const validateBodyParamStrings = (requiredParams :string[]) => {
-  return (req :Request, res :Response, next :NextFunction) => {
-    const missingParams = [];
-
-    requiredParams.forEach(param => {
-      if (!isStringProvided(req.body[param])) {
-        missingParams.push(param);
-      }
-    });
-
-    if (missingParams.length > 0) {
-      const message = `Missing required information - ${missingParams.join(' + ')}`;
-      return res.status(400).json({ message });
-    }
-
-    next();
-  };
-};
 
 /**
  * @apiDefine JSONError
