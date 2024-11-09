@@ -1,0 +1,543 @@
+{
+	"info": {
+		"_postman_id": "dfc60a38-7d6d-44d4-8a25-fa009e3a9de7",
+		"name": "Delete Book Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38630752",
+		"_collection_link": "https://warped-shuttle-586149.postman.co/workspace/TCSS460-Group-1~25d99b7c-ba1d-48c6-8df0-57753de15649/collection/38630752-dfc60a38-7d6d-44d4-8a25-fa009e3a9de7?action=share&source=collection_link&creator=38630752"
+	},
+	"item": [
+		{
+			"name": "Books 200 deleteISBN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"message\");\r",
+							"    pm.expect(response.message).to.equal(\"Book deleted successfully\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is Successful\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/closed/books/9781416914300",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"9781416914300"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 404 deleteISBN",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"message\");\r",
+							"    pm.expect(response.message).to.equal(\"Book not found\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response does not includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.not.have.ownProperty(\"book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is Not Found\", () => {\r",
+							"    pm.response.to.have.status(404);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/closed/books/9781416914300",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"9781416914300"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 deleteAuthor",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"message\");\r",
+							"    pm.expect(response.message).to.equal(\"Book deleted successfully\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is Successful\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/closed/books/author/riordan",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"author",
+						"riordan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 404 deleteAuthor",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"message\");\r",
+							"    pm.expect(response.message).to.equal(\"Book not found\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response does not includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.not.have.ownProperty(\"book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is Not Found\", () => {\r",
+							"    pm.response.to.have.status(404);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/closed/books/author/riordan",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"author",
+						"riordan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 deleteTitle",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"message\");\r",
+							"    pm.expect(response.message).to.equal(\"Book deleted successfully\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is Successful\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/closed/books/title/number",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"title",
+						"number"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 404 deleteTitle",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"message\");\r",
+							"    pm.expect(response.message).to.equal(\"Book not found\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response does not includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.not.have.ownProperty(\"book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is Not Found\", () => {\r",
+							"    pm.response.to.have.status(404);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/closed/books/title/number",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"title",
+						"number"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 deleteCursor",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"message\");\r",
+							"    pm.expect(response.message).to.equal(\"Book deleted successfully\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response includes specified elements\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.ownProperty(\"book\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is Successful\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/closed/books/cursor?limit=1&cursor=40",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"cursor"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": "cursor",
+							"value": "40"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
