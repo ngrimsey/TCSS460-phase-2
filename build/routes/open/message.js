@@ -8,9 +8,10 @@ exports.messageRouter = void 0;
 const express_1 = __importDefault(require("express"));
 //Access the connection to Postgres Database
 const utilities_1 = require("../../core/utilities");
+// Reply with standardized message if missing paramaters
+const middleware_1 = require("../../core/middleware");
 const messageRouter = express_1.default.Router();
 exports.messageRouter = messageRouter;
-const isStringProvided = utilities_1.validationFunctions.isStringProvided;
 const format = (resultRow) => `{${resultRow.priority}} - [${resultRow.name}] says: ${resultRow.message}`;
 function mwValidPriorityQuery(request, response, next) {
     const priority = request.query.priority;
@@ -23,28 +24,6 @@ function mwValidPriorityQuery(request, response, next) {
         console.error('Invalid or missing Priority');
         response.status(400).send({
             message: 'Invalid or missing Priority - please refer to documentation',
-        });
-    }
-}
-function mwValidNameMessageBody(request, response, next) {
-    if (isStringProvided(request.body.name) &&
-        isStringProvided(request.body.message)) {
-        next();
-    }
-    else {
-        // TODO: JA - Maybe we could break this out into a helper function
-        const hasName = isStringProvided(request.body.name);
-        const hasMsg = isStringProvided(request.body.message);
-        console.error('Missing required information - hasName (' + hasName + ") hasMsg (" + hasMsg + ")");
-        let respMsg = "Missing required information - ";
-        if (!hasName)
-            respMsg += "name";
-        if (!hasName && !hasMsg)
-            respMsg += " + message";
-        if (hasName)
-            respMsg += "message";
-        response.status(400).send({
-            message: respMsg,
         });
     }
 }
@@ -68,11 +47,11 @@ function mwValidNameMessageBody(request, response, next) {
  *      "{<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (400: Name exists) {String} message "Name exists"
- * @apiError (400: Missing Parameters) {String} message "Missing required information - [<code>paramater(s)</code>]"
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - <code>paramater [+ another param]</code>"
  * @apiError (400: Invalid Priority) {String} message "Invalid or missing Priority  - please refer to documentation"
  * @apiUse JSONError
  */
-messageRouter.post('/', mwValidNameMessageBody, (request, response, next) => {
+messageRouter.post('/', (0, middleware_1.validateBodyParamStrings)(["name", "message"]), (request, response, next) => {
     const priority = request.body.priority;
     if (utilities_1.validationFunctions.isNumberProvided(priority) &&
         parseInt(priority) >= 1 &&
@@ -248,10 +227,10 @@ messageRouter.get('/:name', (request, response) => {
  *      "Updated: {<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (404: Name Not Found) {String} message "Name not found"
- * @apiError (400: Missing Parameters) {String} message "Missing required information - [<code>paramater(s)</code>]"
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - <code>paramater [+ another param]</code>"
  * @apiUse JSONError
  */
-messageRouter.put('/', mwValidNameMessageBody, (request, response, next) => {
+messageRouter.put('/', (0, middleware_1.validateBodyParamStrings)(["name", "message"]), (request, response, next) => {
     const theQuery = 'UPDATE Demo SET message = $1 WHERE name = $2 RETURNING *';
     const values = [request.body.message, request.body.name];
     utilities_1.pool.query(theQuery, values)

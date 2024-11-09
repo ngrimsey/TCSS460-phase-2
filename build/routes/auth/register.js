@@ -13,6 +13,7 @@ const key = {
 const utilities_1 = require("../../core/utilities");
 const isStringProvided = utilities_1.validationFunctions.isStringProvided;
 const isNumberProvided = utilities_1.validationFunctions.isNumberProvided;
+const isValidPassword = utilities_1.validationFunctions.isValidPassword;
 const generateHash = utilities_1.credentialingFunctions.generateHash;
 const generateSalt = utilities_1.credentialingFunctions.generateSalt;
 const registerRouter = express_1.default.Router();
@@ -20,12 +21,13 @@ exports.registerRouter = registerRouter;
 // Password validation
 // Password must be at least 8 characters long and contain at least one
 // uppercase letter, one lowercase letter, one number, and one special character(!, @, #, $, %, ^, &, *)
-const isValidPassword = (password) => isStringProvided(password) &&
-    password.length > 7 &&
-    /[!@#$%^&*]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password);
+// const isValidPassword = (password: string): boolean =>
+//     isStringProvided(password) &&
+//     password.length > 7 &&
+//     /[!@#$%^&*]/.test(password) &&
+//     /[A-Z]/.test(password) &&
+//     /[a-z]/.test(password) &&
+//     /[0-9]/.test(password);
 // Phone number validation
 // Phone number must be at least 10 characters long and contain only numbers
 const isValidPhone = (phone) => isNumberProvided(phone) && phone.length >= 10;
