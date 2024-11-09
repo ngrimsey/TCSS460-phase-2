@@ -1,0 +1,703 @@
+{
+	"info": {
+		"_postman_id": "52093439-eeab-4047-a33b-43b16cf670ea",
+		"name": "Message (Closed) Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38936981",
+		"_collection_link": "https://tcss460-group-1.postman.co/workspace/25d99b7c-ba1d-48c6-8df0-57753de15649/collection/38936981-52093439-eeab-4047-a33b-43b16cf670ea?action=share&source=collection_link&creator=38936981"
+	},
+	"item": [
+		{
+			"name": "Message* - Request to add a (random) entry (Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    // Retrieve the variables from the environment",
+							"    const expectedName = pm.environment.get(\"expectedName\");",
+							"    const expectedMessage = pm.environment.get(\"expectedMessage\");",
+							"",
+							"    // Construct the expected entry format",
+							"    const expectedEntry = `{1} - [${expectedName}] says: ${expectedMessage}`",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry.message).to.equal(expectedMessage);",
+							"    pm.expect(response.entry.formatted).to.equal(expectedEntry);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generate dynamic values",
+							"const randomName = pm.variables.replaceIn('{{$randomFullName}}');",
+							"const randomMessage = pm.variables.replaceIn('{{$randomCatchPhrase}}');",
+							"",
+							"// Save these values in environment or global variables",
+							"pm.environment.set(\"expectedName\", randomName);",
+							"pm.environment.set(\"expectedMessage\", randomMessage);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{expectedName}}\",\n    \"message\": \"{{expectedMessage}}\",\n    \"priority\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/c/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to add a (non-random) entry",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    // Retrieve the variables from the environment",
+							"    const expectedName = pm.globals.get(\"gTestUsername\");",
+							"    const expectedMessage = pm.globals.get(\"gTestMessage\");",
+							"",
+							"    // Construct the expected entry format",
+							"    const expectedEntry = `{1} - [${expectedName}] says: ${expectedMessage}`",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry.message).to.equal(expectedMessage);",
+							"    pm.expect(response.entry.formatted).to.equal(expectedEntry);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gTestUsername}}\",\n    \"message\": \"{{gTestMessage}}\",\n    \"priority\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/c/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to add a (non-random) entry again (NAME EXISTS!)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400: Name exists\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Name exists\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gTestUsername}}\",\n    \"message\": \"{{gTestMessage}}\",\n    \"priority\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/c/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to add a entry (missing name)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400: Missing Paramaters\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Missing required information - name\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"message\": \"{{gTestMessage}}\",\n    \"priority\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/c/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to add a entry (missing message)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400: Missing Paramaters\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Missing required information - message\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gTestUsername}}\",\n    \"priority\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/c/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to add a entry (missing priority)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400: Missing Paramaters\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing Priority - please refer to documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gTestUsername}}\",\n    \"message\": \"{{gTestMessage}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/c/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to add a entry (invalid priority+)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400: Missing Paramaters\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing Priority - please refer to documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gTestUsername}}\",\n    \"message\": \"{{gTestMessage}}\",\n    \"priority\": 4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/c/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to add a entry (invalid priority-)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400: Missing Paramaters\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing Priority - please refer to documentation\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{gTestUsername}}\",\n    \"message\": \"{{gTestMessage}}\",\n    \"priority\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/c/message",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to remove an entry by name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    // Retrieve the variables from the environment",
+							"    const expectedName = pm.globals.get(\"gTestUsername\");",
+							"    const expectedMessage = pm.globals.get(\"gTestMessage\");",
+							"",
+							"    // Construct the expected entry format",
+							"    const expectedEntry = `Deleted: {1} - [${expectedName}] says: ${expectedMessage}`",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry).to.equal(expectedEntry);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/c/message/:{{gTestUsername}}",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message",
+						":{{gTestUsername}}"
+					],
+					"variable": [
+						{
+							"key": "{{gTestUsername}}",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Message* - Request to remove an entry by name (not found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404: Name Not Found\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    // Retrieve the variables from the environment",
+							"    const expectedName = pm.globals.get(\"gTestUsername\");",
+							"    const expectedMessage = pm.globals.get(\"gTestMessage\");",
+							"",
+							"    // Construct the expected entry format",
+							"    const expectedEntry = `Deleted: {1} - [${expectedName}] says: ${expectedMessage}`",
+							"    pm.expect(response).to.have.ownProperty(\"entry\");",
+							"    pm.expect(response.entry).to.equal(expectedEntry);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gTestAuthToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/c/message/:{{gTestUsername}}",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"c",
+						"message",
+						":{{gTestUsername}}"
+					],
+					"variable": [
+						{
+							"key": "{{gTestUsername}}",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

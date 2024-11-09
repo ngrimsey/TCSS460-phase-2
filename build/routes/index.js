@@ -12,5 +12,5 @@ const routes = express_1.default.Router();
 exports.routes = routes;
 routes.use(open_1.openRoutes);
 routes.use(auth_1.authRoutes);
-routes.use(closed_1.closedRoutes);
+routes.use('/closed', closed_1.closedRoutes);
 //# sourceMappingURL=index.js.map
