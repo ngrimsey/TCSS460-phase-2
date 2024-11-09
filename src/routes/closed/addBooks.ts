@@ -11,7 +11,7 @@ import {
 
 const format = (resultRow) => ({
     ...resultRow,
-    formatted: `{${resultRow.priority}} - [${resultRow.name}] says: ${resultRow.message}`,
+    formatted: `{${resultRow.rating_avg}} - [${resultRow.title}] says: ${resultRow.authors}`,
 });
 
 const isStringProvided = validationFunctions.isStringProvided;
@@ -294,16 +294,15 @@ addBooksRouter.post(
             });
         } catch (error) {
             if (error.detail && <string>error.detail.endsWith('exists.')) {
-                console.error('Name exists');
+                console.error('Duplicate entry detected');
                 response.status(400).send({
-                    message: 'Name exists',
+                    message: 'Duplicate entry exists',
                 });
             } else {
-                //log the error
                 console.error('DB Query error on POST');
                 console.error(error);
                 response.status(500).send({
-                    message: 'server error - contact support',
+                    message: 'Server error - contact support',
                 });
             }
         }
