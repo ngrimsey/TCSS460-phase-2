@@ -1,0 +1,863 @@
+{
+	"info": {
+		"_postman_id": "761e8c0d-39a1-4cc1-a31c-9eafd6be7879",
+		"name": "Book API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39563172",
+		"_collection_link": "https://tcss460-group-1.postman.co/workspace/TCSS460-Group-1~25d99b7c-ba1d-48c6-8df0-57753de15649/collection/39563172-761e8c0d-39a1-4cc1-a31c-9eafd6be7879?action=share&source=collection_link&creator=39563172"
+	},
+	"item": [
+		{
+			"name": "Books 200 allValidPagination",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response is 200 for valid pagination\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/closed/books/all",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 containsBooksArray",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response contains books array\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.be.an(\"array\");\r",
+							"    pm.expect(response.length).to.be.at.most(10);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/all",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 requiredFieldsInEachBook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Each book contains required fields\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    response.forEach(book => {\r",
+							"        pm.expect(book).to.have.property(\"id\");\r",
+							"        pm.expect(book).to.have.property(\"title\");\r",
+							"        pm.expect(book).to.have.property(\"authors\");\r",
+							"        pm.expect(book).to.have.property(\"publication_year\");\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/all",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book 200 validISBN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200 for valid ISBN\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"//9780385751060"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/9780385751060",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"9780385751060"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book 200 correctBookDetails",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response has correct book details for valid ISBN\", () => {\r",
+							"    const book = pm.response.json();\r",
+							"    pm.expect(book).to.have.property(\"id\");\r",
+							"    pm.expect(book).to.have.property(\"title\");\r",
+							"    pm.expect(book).to.have.property(\"authors\");\r",
+							"    pm.expect(book).to.have.property(\"isbn13\").that.equals(\"9780385751060\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/9780385751060",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"9780385751060"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 404 nonExistingISBN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Error message for non-existing ISBN\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response.message).to.equal(\"Book not found\");\r",
+							"});\r",
+							"\r",
+							"//9780385751061\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/9780385751061",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"9780385751061"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 validAuthor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200 for valid author\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"//Stephenie Meyer"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/author/Stephenie Meyer",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"author",
+						"Stephenie Meyer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book 200 containsBooksByAuthor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response has books array by valid author\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.be.an(\"array\");\r",
+							"    response.forEach(book => {\r",
+							"        pm.expect(book).to.have.property(\"authors\").that.includes(\"Stephen King\");\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/author/Stephen King",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"author",
+						"Stephen King"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 404 authorNotFound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Books 404 noAuthorFound\", () => {\r",
+							"    pm.response.to.have.status(404);\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.have.property(\"message\", \"No books found by this author\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/author/ltephen Ming",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"author",
+						"ltephen Ming"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 validTitle",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200 for valid title\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"//Harry Potter and the Sorcerer's Stone (Harry Potter, #1)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/title/Harry Potter and the Sorcerer's Stone (Harry Potter, #1)",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"title",
+						"Harry Potter and the Sorcerer's Stone (Harry Potter, "
+					],
+					"hash": "1)"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 404 nonExistingTitle",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Empty array returned\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.be.an('array').that.is.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/title/parry Potter and the Sorcerer's Stone (Harry Potter, #1)",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"title",
+						"parry Potter and the Sorcerer's Stone (Harry Potter, "
+					],
+					"hash": "1)"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 validRatingExists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Books 200 validRatingExists\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.be.an('array').that.is.not.empty;\r",
+							"    responseBody.forEach(book => {\r",
+							"        pm.expect(book.rating_avg).to.be.at.least(4);\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/rating/4",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 400 invalidRatingType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Books 400 invalidRatingType\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.have.property(\"message\", \"Invalid rating - Rating must be between 1 and 5\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/rating/10",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 400 Invalid Rating Test (Less than 1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Books 400 invalidRatingBelowMin\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.have.property('message', 'Invalid rating - Rating must be between 1 and 5');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/rating/0",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 validYear",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Books 200 validYearExists\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.be.an('array').that.is.not.empty;\r",
+							"\r",
+							"    responseBody.forEach(book => {\r",
+							"        pm.expect(book.publication_year).to.equal(2008);\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/year/2008",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"year",
+						"2008"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 500 notValidYear",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Books 500 noBooksForYearError\", () => {\r",
+							"    pm.response.to.have.status(500);\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.have.property('message', 'Error fetching books by publication year');\r",
+							"    pm.expect(responseBody.error).to.equal('No books found for the year 3000');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/year/3000",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"year",
+						"3000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books  500 nonNumericYear",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Books 500 invalidYearFormatError\", () => {\r",
+							"    pm.response.to.have.status(500);\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.have.property('message', 'Error fetching books by publication year');\r",
+							"    pm.expect(responseBody.error).to.include('invalid input syntax for type integer');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsInJvbGUiOjEsImlkIjoxLCJpYXQiOjE3MzEwNjA1MzAsImV4cCI6MTczMjI3MDEzMH0.RDrCiCc0bUw78JbzrCXi4OCQEv_7tFvREtSDUNdtv2I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:4000/closed/books/year/abcd",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"year",
+						"abcd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books 200 validRatingExists Copy 4",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
