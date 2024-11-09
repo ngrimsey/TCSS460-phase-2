@@ -1,0 +1,1493 @@
+{
+	"info": {
+		"_postman_id": "23714db4-a517-4299-9f4e-7530ae94e8b3",
+		"name": "Auth Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38630752",
+		"_collection_link": "https://warped-shuttle-586149.postman.co/workspace/TCSS460-Group-1~25d99b7c-ba1d-48c6-8df0-57753de15649/collection/38630752-23714db4-a517-4299-9f4e-7530ae94e8b3?action=share&source=collection_link&creator=38630752"
+	},
+	"item": [
+		{
+			"name": "Register 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Successful\", () => {",
+							"    pm.response.to.have.status(201);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"duplicateEmail\", pm.variables.replaceIn('{{$randomEmail}}'));\r",
+							"pm.collectionVariables.set(\"duplicateUser\", pm.variables.replaceIn('{{$randomUserName}}'));\r",
+							"pm.collectionVariables.set(\"duplicatePhone\", pm.variables.replaceIn('{{$timestamp}}'));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{duplicateEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{duplicateUser}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{duplicatePhone}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 emailExists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Email exists\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{duplicateEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 userExists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Username exists\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{duplicateUser}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 phoneExists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Phone number exists\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{duplicatePhone}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 noFirstName",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Missing name or username\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 noLastName",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Missing name or username\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 noUsername",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Missing name or username\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 noEmail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing email - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidEmail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing email - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"invalid\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidEmail 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing email - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"invalid@.com\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidEmail 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing email - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"invalid@bad.email\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 noPhone",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing phone number - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidPhone",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing phone number - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"1234556\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidPhone",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing phone number - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"phonenumber\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 noPassword",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing password - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidPassword",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing password - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Short1?\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidPassword 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing password - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"nocapitals1?\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidPassword 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing password - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"ALLCAPS1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidPassword 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing password - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"NoNumber?\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidPassword 5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing password - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"NoSpecial00\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"1\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 noRole",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing role - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidRole",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing role - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"two\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 400 invalidRole 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response includes specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.ownProperty(\"message\");",
+							"    pm.expect(response.message).to.equal(\"Invalid or missing role - please refer to documentation\");",
+							"});",
+							"",
+							"pm.test(\"Response does NOT include specified elements\", () => {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"    pm.expect(response).to.not.have.ownProperty(\"accessToken\");",
+							"});",
+							"",
+							"pm.test(\"Response is Bad Request\", () => {",
+							"    pm.response.to.have.status(400);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\":\"{{$randomFirstName}}\",\r\n    \"lastname\":\"{{$randomLastName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"Password1!\",\r\n    \"username\":\"{{$randomUserName}}\",\r\n    \"role\":\"5\",\r\n    \"phone\":\"{{$timestamp}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:4000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "duplicateEmail",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "duplicateUser",
+			"value": ""
+		},
+		{
+			"key": "duplicatePhone",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
