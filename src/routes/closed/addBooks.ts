@@ -11,7 +11,7 @@ import {
 
 const format = (resultRow) => ({
     ...resultRow,
-    formatted: `{${resultRow.rating_avg}} - [${resultRow.title}] says: ${resultRow.authors}`,
+    formatted: `{${resultRow.id}} - [${resultRow.title}] says: ${resultRow.authors}`,
 });
 
 const isStringProvided = validationFunctions.isStringProvided;
@@ -47,7 +47,7 @@ const isValidAvgRating = (avgRating: string): boolean =>
 //  Rating count validation
 // No arguments yet
 const isValidRatingCnt = (ratingCnt: string): boolean =>
-    isStringProvided(ratingCnt);
+    isNumberProvided(ratingCnt);
 
 // 1 star Rating validation
 // No arguments yet
@@ -73,14 +73,16 @@ const isValidFiveStar = (fiveStar: string): boolean =>
     isNumberProvided(fiveStar);
 
 // Image URL validation
-// No arguments yet
+// Must follow basic structure of http://, https://, or ftp://
 const isValidImageURL = (imageURL: string): boolean =>
-    isStringProvided(imageURL);
+    isStringProvided(imageURL) &&
+    /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(imageURL);
 
 // Small Image URL validation
-// No arguments yet
+// Must follow basic structure of http://, https://, or ftp://
 const isValidSmallImageURL = (smallImageURL: string): boolean =>
-    isStringProvided(smallImageURL);
+    isStringProvided(smallImageURL) &&
+    /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(smallImageURL);
 
 addBooksRouter.get('/test', (req, res) => {
     res.send('Test route working');
@@ -111,8 +113,10 @@ addBooksRouter.get('/test', (req, res) => {
  * 1-5 Star Rating rules:
  *
  * Image URL rules:
+ * - Must follow basic structure of http://, https://, or ftp://
  *
  * Small Image URL rules:
+ * - Must follow basic structure of http://, https://, or ftp://
  *
  * @apiName PostaddBook
  * @apiGroup closed
@@ -210,7 +214,7 @@ addBooksRouter.post(
             next();
         } else {
             response.status(400).send({
-                message: 'Invalid or Missing ISBN',
+                message: 'Invalid or Missing rating count',
             });
         }
     },
