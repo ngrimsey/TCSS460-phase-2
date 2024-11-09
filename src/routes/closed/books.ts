@@ -454,12 +454,12 @@ bookRouter.put(
                         });
             }
             const ratingAvg =
-                (parseInt(result.rows[0].rating_1_star) +
+                ((parseInt(result.rows[0].rating_1_star) +
                     parseInt(result.rows[0].rating_2_star) * 2 +
                     parseInt(result.rows[0].rating_3_star) * 3 +
                     parseInt(result.rows[0].rating_4_star) * 4 +
                     parseInt(result.rows[0].rating_5_star) * 5) /
-                ratingCount;
+                ratingCount).toFixed(2);
             query =
                 'UPDATE books SET rating_avg = $1, rating_count = $2, rating_1_star = $3, rating_2_star = $4, rating_3_star = $5, rating_4_star = $6, rating_5_star = $7 WHERE id = $8 RETURNING *';
             await pool
@@ -562,12 +562,12 @@ bookRouter.delete(
                         });
             }
             const ratingAvg =
-                (parseInt(result.rows[0].rating_1_star) +
+                ((parseInt(result.rows[0].rating_1_star) +
                     parseInt(result.rows[0].rating_2_star) * 2 +
                     parseInt(result.rows[0].rating_3_star) * 3 +
                     parseInt(result.rows[0].rating_4_star) * 4 +
                     parseInt(result.rows[0].rating_5_star) * 5) /
-                ratingCount;
+                ratingCount).toFixed(2);
             query =
                 'UPDATE books SET rating_avg = $1, rating_count = $2, rating_1_star = $3, rating_2_star = $4, rating_3_star = $5, rating_4_star = $6, rating_5_star = $7 WHERE id = $8 RETURNING *';
             await pool
