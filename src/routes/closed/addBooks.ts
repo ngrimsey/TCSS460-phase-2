@@ -11,7 +11,7 @@ import {
 
 const format = (resultRow) => ({
     ...resultRow,
-    formatted: `{${resultRow.rating_avg}} - [${resultRow.title}] says: ${resultRow.authors}`,
+    formatted: `{${resultRow.id}} - [${resultRow.title}] says: ${resultRow.authors}`,
 });
 
 const isStringProvided = validationFunctions.isStringProvided;
@@ -19,11 +19,12 @@ const isNumberProvided = validationFunctions.isNumberProvided;
 
 // Book ID validation
 // No arguments yet
-const isValidBookID = (bookId: string): boolean => isStringProvided(bookId);
+const isValidBookID = (bookId: string): boolean => isNumberProvided(bookId);
 
 // ISBN validation
-// No arguments yet
-const isValidISBN = (isbn: string): boolean => isStringProvided(isbn);
+// length has to be 13digits
+const isValidISBN = (isbn: string): boolean =>
+    isNumberProvided(isbn) && /^\d{13}$/.test(isbn);
 
 // Author validation
 // No arguments yet
@@ -46,40 +47,42 @@ const isValidAvgRating = (avgRating: string): boolean =>
 //  Rating count validation
 // No arguments yet
 const isValidRatingCnt = (ratingCnt: string): boolean =>
-    isStringProvided(ratingCnt);
+    isNumberProvided(ratingCnt);
 
 // 1 star Rating validation
 // No arguments yet
-const isValidOneStar = (oneStar: string): boolean => isStringProvided(oneStar);
+const isValidOneStar = (oneStar: string): boolean => isNumberProvided(oneStar);
 
 // 2 star Rating validation
 // No arguments yet
-const isValidTwoStar = (twoStar: string): boolean => isStringProvided(twoStar);
+const isValidTwoStar = (twoStar: string): boolean => isNumberProvided(twoStar);
 
 // 3 star Rating validation
 // No arguments yet
 const isValidThreeStar = (threeStar: string): boolean =>
-    isStringProvided(threeStar);
+    isNumberProvided(threeStar);
 
 // 4 star Rating validation
 // No arguments yet
 const isValidFourStar = (fourStar: string): boolean =>
-    isStringProvided(fourStar);
+    isNumberProvided(fourStar);
 
 // 5 star Rating validation
 // No arguments yet
 const isValidFiveStar = (fiveStar: string): boolean =>
-    isStringProvided(fiveStar);
+    isNumberProvided(fiveStar);
 
 // Image URL validation
-// No arguments yet
+// Must follow basic structure of http://, https://, or ftp://
 const isValidImageURL = (imageURL: string): boolean =>
-    isStringProvided(imageURL);
+    isStringProvided(imageURL) &&
+    /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(imageURL);
 
 // Small Image URL validation
-// No arguments yet
+// Must follow basic structure of http://, https://, or ftp://
 const isValidSmallImageURL = (smallImageURL: string): boolean =>
-    isStringProvided(smallImageURL);
+    isStringProvided(smallImageURL) &&
+    /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(smallImageURL);
 
 addBooksRouter.get('/test', (req, res) => {
     res.send('Test route working');
@@ -94,6 +97,7 @@ addBooksRouter.get('/test', (req, res) => {
  * ID rules:
  *
  * ISBN rules:
+ * - Must be 13 digits.
  *
  * Author rules:
  *
@@ -109,8 +113,10 @@ addBooksRouter.get('/test', (req, res) => {
  * 1-5 Star Rating rules:
  *
  * Image URL rules:
+ * - Must follow basic structure of http://, https://, or ftp://
  *
  * Small Image URL rules:
+ * - Must follow basic structure of http://, https://, or ftp://
  *
  * @apiName PostaddBook
  * @apiGroup closed
@@ -130,12 +136,20 @@ addBooksRouter.get('/test', (req, res) => {
  * @apiBody {String} imageURL the image url of the book
  * @apiBody {String} smallImageURL the small image url of the book
  *
+ * @apiError (400: Invalid bookId) {String} message "Invalid or missing bookId - please refer to documentation"
+ * @apiError (400: Invalid isbn) {String} message "Invalid or missing ISBN - please refer to documentation"
+ * @apiError (400: Invalid author) {String} message "Invalid or missing Author Name - please refer to documentation"
+ * @apiError (400: Invalid year) {String} message "Invalid or missing Published Year - please refer to documentation"
+ * @apiError (400: Invalid title) {String} message "Invalid or missing Title - please refer to documentation"
+ * @apiError (400: Invalid avgRating) {String} message "Invalid or missing Average Rating - please refer to documentation"
+ * @apiError (400: Invalid oneStar) {String} message "Invalid or missing One star Rating - please refer to documentation"
+ * @apiError (400: Invalid twoStar) {String} message "Invalid or missing Two star Rating - please refer to documentation"
+ * @apiError (400: Invalid threeStar) {String} message "Invalid or missing Three star Rating - please refer to documentation"
+ * @apiError (400: Invalid fourStar) {String} message "Invalid or missing Four star Rating - please refer to documentation"
+ * @apiError (400: Invalid fiveStar) {String} message "Invalid or missing Five star Rating - please refer to documentation"
+ * @apiError (400: Invalid imageURL) {String} message "Invalid or missing Image URL - please refer to documentation"
+ * @apiError (400: Invalid smallImageURL) {String} message "Invalid or missing Small Image URL - please refer to documentation"
  *
- * @apiError (400: Invalid ISBN) {String} message "Invalid or missing ISBN - please refer to documentation"
- * @apiError (400: Invalid Author Name) {String} message "Invalid or missing Author Name - please refer to documentation"
- * @apiError (400: Invalid Published Year) {String} message "Invalid or missing Published Year - please refer to documentation"
- * @apiError (400: Invalid Original Title) {String} message "Invalid or missing Original Title - please refer to documentation"
- * @apiError (400: Invalid Title) {String} message "Invalid or missing Title - please refer to documentation"
  *
  */
 addBooksRouter.post(
@@ -200,7 +214,7 @@ addBooksRouter.post(
             next();
         } else {
             response.status(400).send({
-                message: 'Invalid or Missing ISBN',
+                message: 'Invalid or Missing rating count',
             });
         }
     },
