@@ -19,7 +19,7 @@ const isNumberProvided = validationFunctions.isNumberProvided;
 
 // Book ID validation
 // No arguments yet
-const isValidBookID = (bookId: string): boolean => isStringProvided(bookId);
+const isValidBookID = (bookId: string): boolean => isNumberProvided(bookId);
 
 // ISBN validation
 // length has to be 13digits
@@ -132,12 +132,20 @@ addBooksRouter.get('/test', (req, res) => {
  * @apiBody {String} imageURL the image url of the book
  * @apiBody {String} smallImageURL the small image url of the book
  *
+ * @apiError (400: Invalid bookId) {String} message "Invalid or missing bookId - please refer to documentation"
+ * @apiError (400: Invalid isbn) {String} message "Invalid or missing ISBN - please refer to documentation"
+ * @apiError (400: Invalid author) {String} message "Invalid or missing Author Name - please refer to documentation"
+ * @apiError (400: Invalid year) {String} message "Invalid or missing Published Year - please refer to documentation"
+ * @apiError (400: Invalid title) {String} message "Invalid or missing Title - please refer to documentation"
+ * @apiError (400: Invalid avgRating) {String} message "Invalid or missing Average Rating - please refer to documentation"
+ * @apiError (400: Invalid oneStar) {String} message "Invalid or missing One star Rating - please refer to documentation"
+ * @apiError (400: Invalid twoStar) {String} message "Invalid or missing Two star Rating - please refer to documentation"
+ * @apiError (400: Invalid threeStar) {String} message "Invalid or missing Three star Rating - please refer to documentation"
+ * @apiError (400: Invalid fourStar) {String} message "Invalid or missing Four star Rating - please refer to documentation"
+ * @apiError (400: Invalid fiveStar) {String} message "Invalid or missing Five star Rating - please refer to documentation"
+ * @apiError (400: Invalid imageURL) {String} message "Invalid or missing Image URL - please refer to documentation"
+ * @apiError (400: Invalid smallImageURL) {String} message "Invalid or missing Small Image URL - please refer to documentation"
  *
- * @apiError (400: Invalid ISBN) {String} message "Invalid or missing ISBN - please refer to documentation"
- * @apiError (400: Invalid Author Name) {String} message "Invalid or missing Author Name - please refer to documentation"
- * @apiError (400: Invalid Published Year) {String} message "Invalid or missing Published Year - please refer to documentation"
- * @apiError (400: Invalid Original Title) {String} message "Invalid or missing Original Title - please refer to documentation"
- * @apiError (400: Invalid Title) {String} message "Invalid or missing Title - please refer to documentation"
  *
  */
 addBooksRouter.post(
