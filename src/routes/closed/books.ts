@@ -3,8 +3,6 @@ import { pool } from '../../core/utilities/sql_conn';
 import { IBook } from '../../core/models/booksModel';
 import { validationFunctions } from '../../core/utilities';
 
-const { isNumberProvided } = validationFunctions;
-
 const bookRouter: Router = express.Router();
 const isNumberProvided = validationFunctions.isNumberProvided;
 
