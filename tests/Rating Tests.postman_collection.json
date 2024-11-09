@@ -890,6 +890,201 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Rating 400 Invalid Rating delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedResponse = `Rating number '10' is not valid!`;",
+							"",
+							"    pm.expect(response.message).to.equal(expectedResponse);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 404 Name Not Found add",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedResponse = `Book ID '0' was not found!`;",
+							"",
+							"    pm.expect(response.message).to.equal(expectedResponse);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 0,\n    \"rating\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 404 Name Not Found delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedResponse = `Book ID '0' was not found!`;",
+							"",
+							"    pm.expect(response.message).to.equal(expectedResponse);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 0,\n    \"rating\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
