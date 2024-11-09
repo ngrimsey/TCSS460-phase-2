@@ -5,7 +5,7 @@ import { IBook } from '../../core/models/booksModel';
 const bookRouter: Router = express.Router();
 
 /**
- * @api {get} /books/all Get All Books (Paginated)
+ * @api {get} /closed/books/all Get All Books (Paginated)
  * @apiName GetAllBooks
  * @apiGroup Books
  *
@@ -45,7 +45,7 @@ bookRouter.get('/all', async (req: Request, res: Response) => {
 });
 
 /**
- * @api {get} /books/:isbn Get Book by ISBN
+ * @api {get} /closed/books/:isbn Get Book by ISBN
  * @apiName GetBookByISBN
  * @apiGroup Books
  *
@@ -53,9 +53,9 @@ bookRouter.get('/all', async (req: Request, res: Response) => {
  *
  * @apiSuccess {Number} id Book ID.
  * @apiSuccess {String} title Title of the book.
- * @apiSuccess {String} authors Authors of the book.
- * @apiSuccess {Number} publication_year Publication year of the book.
- * @apiSuccess {Number} rating_avg Average rating.
+ * @apiSuccess {String} books.authors Authors of the book.
+ * @apiSuccess {Number} books.publication_year Publication year of the book.
+ * @apiSuccess {Number} books.rating_avg Average rating.
  *
  * @apiError {Object} 404 Book not found.
  * @apiErrorExample {json} Error-Response:
@@ -81,7 +81,7 @@ bookRouter.get('/:isbn', async (req: Request, res: Response) => {
 });
 
 /**
- * @api {get} /books/author/:author Get Books by Author
+ * @api {get} /closed/books/author/:author Get Books by Author
  * @apiName GetBooksByAuthor
  * @apiGroup Books
  *
@@ -103,7 +103,7 @@ bookRouter.get('/author/:author', async (req: Request, res: Response) => {
     const { author } = req.params;
 
     try {
-        const query = `SELECT * FROM BOOKS  WHERE authors ILIKE $1`;
+        const query = `SELECT * FROM BOOKS WHERE authors ILIKE $1`;
         const result = await pool.query(query, [`%${author}%`]);
         res.status(200).json(result.rows);
     } catch (error) {
@@ -112,7 +112,7 @@ bookRouter.get('/author/:author', async (req: Request, res: Response) => {
 });
 
 /**
- * @api {get} /books/title/:title Get Books by Title
+ * @api {get} /closed/books/title/:title Get Books by Title
  * @apiName GetBooksByTitle
  * @apiGroup Books
  *
@@ -143,7 +143,7 @@ bookRouter.get('/title/:title', async (req: Request, res: Response) => {
 });
 
 /**
- * @api {get} /books/rating/:rating Get Books by Minimum Rating
+ * @api {get} /closed/books/rating/:rating Get Books by Minimum Rating
  * @apiName GetBooksByRating
  * @apiGroup Books
  *
@@ -166,7 +166,7 @@ bookRouter.get('/rating/:rating', async (req: Request, res: Response) => {
     const minRating = parseFloat(req.params.rating);
 
     try {
-        const query = `SELECT * FROM BOOKS  WHERE rating_count >= $1`;
+        const query = `SELECT * FROM BOOKS WHERE rating_avg >= $1`;
         const result = await pool.query(query, [minRating]);
         res.status(200).json(result.rows);
     } catch (error) {
@@ -175,7 +175,7 @@ bookRouter.get('/rating/:rating', async (req: Request, res: Response) => {
 });
 
 /**
- * @api {get} /books/year/:year Get Books by Publication Year
+ * @api {get} /closed/books/year/:year Get Books by Publication Year
  * @apiName GetBooksByYear
  * @apiGroup Books
  *
@@ -206,4 +206,4 @@ bookRouter.get('/year/:year', async (req: Request, res: Response) => {
     }
 });
 
-export  {bookRouter};
+export { bookRouter };
