@@ -1,6 +1,5 @@
-import express, { NextFunction, Request, Response, Router } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { pool } from '../../core/utilities/sql_conn';
-import { IBook } from '../../core/models/booksModel';
 import { validationFunctions } from '../../core/utilities';
 
 const bookRouter: Router = express.Router();
@@ -404,97 +403,90 @@ bookRouter.delete('/cursor', async (request: Request, response: Response) => {
  * @apiError (400: Invalid Rating) {String} message "Rating number '[<code>rating</code>]' is not valid!"
  * @apiError (404: Name Not Found) {String} message "Book ID '[<code>id</code>]' was not found!"
  */
-bookRouter.put(
-    '/rating',
-    async (request: Request, response: Response, next: NextFunction) => {
-        if (
-            isNumberProvided(request.body.id) &&
-            isNumberProvided(request.body.rating)
-        ) {
-            const ratingNumber = parseInt(request.body.rating);
-            const id = parseInt(request.body.id);
-            let query =
-                'SELECT rating_avg, rating_count, rating_1_star, rating_2_star, rating_3_star, rating_4_star, rating_5_star FROM books WHERE id = $1';
-            let result = await pool.query(query, [id]);
-            if (result.rowCount != 1) {
-                response
-                    .status(404)
-                    .json({ message: "Book ID '" + id + "' was not found!" });
-            }
-            const ratingCount = parseInt(result.rows[0].rating_count) + 1;
-            switch (ratingNumber) {
-                case 1:
-                    result.rows[0].rating_1_star =
-                        parseInt(result.rows[0].rating_1_star) + 1;
-                    break;
-                case 2:
-                    result.rows[0].rating_2_star =
-                        parseInt(result.rows[0].rating_2_star) + 1;
-                    break;
-                case 3:
-                    result.rows[0].rating_3_star =
-                        parseInt(result.rows[0].rating_3_star) + 1;
-                    break;
-                case 4:
-                    result.rows[0].rating_4_star =
-                        parseInt(result.rows[0].rating_4_star) + 1;
-                    break;
-                case 5:
-                    result.rows[0].rating_5_star =
-                        parseInt(result.rows[0].rating_5_star) + 1;
-                    break;
-                default:
-                    response
-                        .status(400)
-                        .json({
-                            message:
-                                "Rating number '" +
-                                ratingNumber +
-                                "' is not valid!",
-                        });
-                        return;
-            }
-            const ratingAvg =
-                ((parseInt(result.rows[0].rating_1_star) +
-                    parseInt(result.rows[0].rating_2_star) * 2 +
-                    parseInt(result.rows[0].rating_3_star) * 3 +
-                    parseInt(result.rows[0].rating_4_star) * 4 +
-                    parseInt(result.rows[0].rating_5_star) * 5) /
-                ratingCount).toFixed(2);
-            query =
-                'UPDATE books SET rating_avg = $1, rating_count = $2, rating_1_star = $3, rating_2_star = $4, rating_3_star = $5, rating_4_star = $6, rating_5_star = $7 WHERE id = $8 RETURNING *';
-            await pool
-                .query(query, [
-                    ratingAvg,
-                    ratingCount,
-                    result.rows[0].rating_1_star,
-                    result.rows[0].rating_2_star,
-                    result.rows[0].rating_3_star,
-                    result.rows[0].rating_4_star,
-                    result.rows[0].rating_5_star,
-                    id,
-                ])
-                .then((result) => {
-                    response.status(200).json(result.rows);
-                })
-                .catch((error) => {
-                    //log the error
-                    console.error('DB Query error on PUT');
-                    console.error(error);
-                    response.status(500).send({
-                        message: 'server error - contact support',
-                    });
-                });
-        } else {
+bookRouter.put('/rating', async (request: Request, response: Response) => {
+    if (
+        isNumberProvided(request.body.id) &&
+        isNumberProvided(request.body.rating)
+    ) {
+        const ratingNumber = parseInt(request.body.rating);
+        const id = parseInt(request.body.id);
+        let query =
+            'SELECT rating_avg, rating_count, rating_1_star, rating_2_star, rating_3_star, rating_4_star, rating_5_star FROM books WHERE id = $1';
+        const result = await pool.query(query, [id]);
+        if (result.rowCount != 1) {
             response
-                .status(400)
-                .json({
-                    message:
-                        'Invalid or missing book id number - please refer to documentation',
-                });
+                .status(404)
+                .json({ message: "Book ID '" + id + "' was not found!" });
+            return;
         }
+        const ratingCount = parseInt(result.rows[0].rating_count) + 1;
+        switch (ratingNumber) {
+            case 1:
+                result.rows[0].rating_1_star =
+                    parseInt(result.rows[0].rating_1_star) + 1;
+                break;
+            case 2:
+                result.rows[0].rating_2_star =
+                    parseInt(result.rows[0].rating_2_star) + 1;
+                break;
+            case 3:
+                result.rows[0].rating_3_star =
+                    parseInt(result.rows[0].rating_3_star) + 1;
+                break;
+            case 4:
+                result.rows[0].rating_4_star =
+                    parseInt(result.rows[0].rating_4_star) + 1;
+                break;
+            case 5:
+                result.rows[0].rating_5_star =
+                    parseInt(result.rows[0].rating_5_star) + 1;
+                break;
+            default:
+                response.status(400).json({
+                    message:
+                        "Rating number '" + ratingNumber + "' is not valid!",
+                });
+                return;
+        }
+        const ratingAvg = (
+            (parseInt(result.rows[0].rating_1_star) +
+                parseInt(result.rows[0].rating_2_star) * 2 +
+                parseInt(result.rows[0].rating_3_star) * 3 +
+                parseInt(result.rows[0].rating_4_star) * 4 +
+                parseInt(result.rows[0].rating_5_star) * 5) /
+            ratingCount
+        ).toFixed(2);
+        query =
+            'UPDATE books SET rating_avg = $1, rating_count = $2, rating_1_star = $3, rating_2_star = $4, rating_3_star = $5, rating_4_star = $6, rating_5_star = $7 WHERE id = $8 RETURNING *';
+        await pool
+            .query(query, [
+                ratingAvg,
+                ratingCount,
+                result.rows[0].rating_1_star,
+                result.rows[0].rating_2_star,
+                result.rows[0].rating_3_star,
+                result.rows[0].rating_4_star,
+                result.rows[0].rating_5_star,
+                id,
+            ])
+            .then((result) => {
+                response.status(200).json(result.rows);
+            })
+            .catch((error) => {
+                //log the error
+                console.error('DB Query error on PUT');
+                console.error(error);
+                response.status(500).send({
+                    message: 'server error - contact support',
+                });
+            });
+    } else {
+        response.status(400).json({
+            message:
+                'Invalid or missing book id number - please refer to documentation',
+        });
     }
-);
+});
 
 /**
  * @api {delete} /closed/books/rating Remove a rating from a book
@@ -513,96 +505,89 @@ bookRouter.put(
  * @apiError (400: Invalid Rating) {String} message "Rating number '[<code>rating</code>]' is not valid!"
  * @apiError (404: Name Not Found) {String} message "Book ID '[<code>id</code>]' was not found!"
  */
-bookRouter.delete(
-    '/rating',
-    async (request: Request, response: Response, next: NextFunction) => {
-        if (
-            isNumberProvided(request.body.id) &&
-            isNumberProvided(request.body.rating)
-        ) {
-            const ratingNumber = parseInt(request.body.rating);
-            const id = parseInt(request.body.id);
-            let query =
-                'SELECT rating_avg, rating_count, rating_1_star, rating_2_star, rating_3_star, rating_4_star, rating_5_star FROM books WHERE id = $1';
-            let result = await pool.query(query, [id]);
-            if (result.rowCount != 1) {
-                response
-                    .status(404)
-                    .json({ message: "Book ID '" + id + "' was not found!" });
-            }
-            const ratingCount = parseInt(result.rows[0].rating_count) - 1;
-            switch (ratingNumber) {
-                case 1:
-                    result.rows[0].rating_1_star =
-                        parseInt(result.rows[0].rating_1_star) - 1;
-                    break;
-                case 2:
-                    result.rows[0].rating_2_star =
-                        parseInt(result.rows[0].rating_2_star) - 1;
-                    break;
-                case 3:
-                    result.rows[0].rating_3_star =
-                        parseInt(result.rows[0].rating_3_star) - 1;
-                    break;
-                case 4:
-                    result.rows[0].rating_4_star =
-                        parseInt(result.rows[0].rating_4_star) - 1;
-                    break;
-                case 5:
-                    result.rows[0].rating_5_star =
-                        parseInt(result.rows[0].rating_5_star) - 1;
-                    break;
-                default:
-                    response
-                        .status(400)
-                        .json({
-                            message:
-                                "Rating number '" +
-                                ratingNumber +
-                                "' is not valid!",
-                        });
-                        return;
-            }
-            const ratingAvg =
-                ((parseInt(result.rows[0].rating_1_star) +
-                    parseInt(result.rows[0].rating_2_star) * 2 +
-                    parseInt(result.rows[0].rating_3_star) * 3 +
-                    parseInt(result.rows[0].rating_4_star) * 4 +
-                    parseInt(result.rows[0].rating_5_star) * 5) /
-                ratingCount).toFixed(2);
-            query =
-                'UPDATE books SET rating_avg = $1, rating_count = $2, rating_1_star = $3, rating_2_star = $4, rating_3_star = $5, rating_4_star = $6, rating_5_star = $7 WHERE id = $8 RETURNING *';
-            await pool
-                .query(query, [
-                    ratingAvg,
-                    ratingCount,
-                    result.rows[0].rating_1_star,
-                    result.rows[0].rating_2_star,
-                    result.rows[0].rating_3_star,
-                    result.rows[0].rating_4_star,
-                    result.rows[0].rating_5_star,
-                    id,
-                ])
-                .then((result) => {
-                    response.status(200).json(result.rows);
-                })
-                .catch((error) => {
-                    //log the error
-                    console.error('DB Query error on PUT');
-                    console.error(error);
-                    response.status(500).send({
-                        message: 'server error - contact support',
-                    });
-                });
-        } else {
+bookRouter.delete('/rating', async (request: Request, response: Response) => {
+    if (
+        isNumberProvided(request.body.id) &&
+        isNumberProvided(request.body.rating)
+    ) {
+        const ratingNumber = parseInt(request.body.rating);
+        const id = parseInt(request.body.id);
+        let query =
+            'SELECT rating_avg, rating_count, rating_1_star, rating_2_star, rating_3_star, rating_4_star, rating_5_star FROM books WHERE id = $1';
+        const result = await pool.query(query, [id]);
+        if (result.rowCount != 1) {
             response
-                .status(400)
-                .json({
-                    message:
-                        'Invalid or missing book id number - please refer to documentation',
-                });
+                .status(404)
+                .json({ message: "Book ID '" + id + "' was not found!" });
+            return;
         }
+        const ratingCount = parseInt(result.rows[0].rating_count) - 1;
+        switch (ratingNumber) {
+            case 1:
+                result.rows[0].rating_1_star =
+                    parseInt(result.rows[0].rating_1_star) - 1;
+                break;
+            case 2:
+                result.rows[0].rating_2_star =
+                    parseInt(result.rows[0].rating_2_star) - 1;
+                break;
+            case 3:
+                result.rows[0].rating_3_star =
+                    parseInt(result.rows[0].rating_3_star) - 1;
+                break;
+            case 4:
+                result.rows[0].rating_4_star =
+                    parseInt(result.rows[0].rating_4_star) - 1;
+                break;
+            case 5:
+                result.rows[0].rating_5_star =
+                    parseInt(result.rows[0].rating_5_star) - 1;
+                break;
+            default:
+                response.status(400).json({
+                    message:
+                        "Rating number '" + ratingNumber + "' is not valid!",
+                });
+                return;
+        }
+        const ratingAvg = (
+            (parseInt(result.rows[0].rating_1_star) +
+                parseInt(result.rows[0].rating_2_star) * 2 +
+                parseInt(result.rows[0].rating_3_star) * 3 +
+                parseInt(result.rows[0].rating_4_star) * 4 +
+                parseInt(result.rows[0].rating_5_star) * 5) /
+            ratingCount
+        ).toFixed(2);
+        query =
+            'UPDATE books SET rating_avg = $1, rating_count = $2, rating_1_star = $3, rating_2_star = $4, rating_3_star = $5, rating_4_star = $6, rating_5_star = $7 WHERE id = $8 RETURNING *';
+        await pool
+            .query(query, [
+                ratingAvg,
+                ratingCount,
+                result.rows[0].rating_1_star,
+                result.rows[0].rating_2_star,
+                result.rows[0].rating_3_star,
+                result.rows[0].rating_4_star,
+                result.rows[0].rating_5_star,
+                id,
+            ])
+            .then((result) => {
+                response.status(200).json(result.rows);
+            })
+            .catch((error) => {
+                //log the error
+                console.error('DB Query error on PUT');
+                console.error(error);
+                response.status(500).send({
+                    message: 'server error - contact support',
+                });
+            });
+    } else {
+        response.status(400).json({
+            message:
+                'Invalid or missing book id number - please refer to documentation',
+        });
     }
-);
+});
 
 export { bookRouter };
