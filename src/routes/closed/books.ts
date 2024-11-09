@@ -452,6 +452,7 @@ bookRouter.put(
                                 ratingNumber +
                                 "' is not valid!",
                         });
+                        return;
             }
             const ratingAvg =
                 ((parseInt(result.rows[0].rating_1_star) +
@@ -560,6 +561,7 @@ bookRouter.delete(
                                 ratingNumber +
                                 "' is not valid!",
                         });
+                        return;
             }
             const ratingAvg =
                 ((parseInt(result.rows[0].rating_1_star) +
