@@ -16,8 +16,8 @@ const checkToken = (request, response, next) => {
             // Remove Bearer from string
             token = token.slice(7, token.length);
         }
-        jsonwebtoken_1.default.verify(token, config.secret, (err, decoded) => {
-            if (err) {
+        jsonwebtoken_1.default.verify(token, config.secret, (error, decoded) => {
+            if (error) {
                 return response.status(403).json({
                     success: false,
                     message: 'Token is not valid',
