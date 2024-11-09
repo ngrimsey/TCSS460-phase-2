@@ -1,0 +1,48 @@
+on:
+    push:
+        branches:
+            - main # Change this to your default branch if different
+    workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
+
+            - name: Install apidoc
+              run: npm install -g apidoc
+
+            - name: Generate API documentation
+              run: apidoc -o temp_docs/
+
+            - name: Deploy to gh-pages
+              run: |
+                  # Configure git with token-based authentication
+                  git config --global user.name "github-actions[bot]"
+                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                  git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+                  # Check if gh-pages branch exists, and switch to it or create it
+                  if git show-ref --quiet refs/heads/gh-pages; then
+                    git checkout gh-pages
+                  else
+                    git checkout --orphan gh-pages
+                  fi
+
+                  # Remove all tracked content in gh-pages branch
+                  git rm -rf .
+
+                  # Move temp_docs to docs
+                  mv temp_docs docs
+
+                  # Add and commit the new docs content
+                  git add docs
+                  git commit -m "Deploy API documentation"
+                  git push -f origin gh-pages

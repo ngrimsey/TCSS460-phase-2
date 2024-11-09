@@ -15,6 +15,7 @@ import {
 
 const isStringProvided = validationFunctions.isStringProvided;
 const isNumberProvided = validationFunctions.isNumberProvided;
+const isValidPassword = validationFunctions.isValidPassword;
 const generateHash = credentialingFunctions.generateHash;
 const generateSalt = credentialingFunctions.generateSalt;
 
@@ -27,18 +28,18 @@ export interface IUserRequest extends Request {
 // Password validation
 // Password must be at least 8 characters long and contain at least one
 // uppercase letter, one lowercase letter, one number, and one special character(!, @, #, $, %, ^, &, *)
-const isValidPassword = (password: string): boolean =>
-    isStringProvided(password) &&
-    password.length > 7 &&
-    /[!@#$%^&*]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[0-9]/.test(password);
+// const isValidPassword = (password: string): boolean =>
+//     isStringProvided(password) &&
+//     password.length > 7 &&
+//     /[!@#$%^&*]/.test(password) &&
+//     /[A-Z]/.test(password) &&
+//     /[a-z]/.test(password) &&
+//     /[0-9]/.test(password);
 
 // Phone number validation
 // Phone number must be at least 10 characters long and contain only numbers
 const isValidPhone = (phone: string): boolean =>
-    validationFunctions.isNumberProvided(phone) && phone.length >= 10;
+    isNumberProvided(phone) && phone.length >= 10;
 
 // Role validation
 // Role must be a number between 1 and 3
@@ -58,7 +59,6 @@ const isValidEmail = (email: string): boolean =>
         email.endsWith('.net') ||
         email.endsWith('.org'));
 
-// middleware functions may be defined elsewhere!
 const emailMiddlewareCheck = (
     request: Request,
     response: Response,
@@ -95,9 +95,6 @@ const emailMiddlewareCheck = (
  *
  * Role rules:
  * - Must be a number between 1 and 3
- * - 1: Admin - access to all functions
- * - 2: Moderator - can add and edit data
- * - 3: User - can view data and add ratings
  *
  * @apiName PostRegister
  * @apiGroup Auth
@@ -123,12 +120,12 @@ const emailMiddlewareCheck = (
  * @apiError (400: Phone exists) {String} message "Phone number exists"
  *
  */
+
 registerRouter.post(
     '/register',
-    emailMiddlewareCheck, // these middleware functions may be defined elsewhere!
+    emailMiddlewareCheck,
     (request: Request, response: Response, next: NextFunction) => {
         //Verify that the caller supplied all the parameters
-        //In js, empty strings or null values evaluate to false
         if (
             isStringProvided(request.body.firstname) &&
             isStringProvided(request.body.lastname) &&
@@ -184,17 +181,13 @@ registerRouter.post(
             request.body.phone,
             request.body.role,
         ];
-        // console.dir({ ...request.body, password: '******' });
         pool.query(theQuery, values)
             .then((result) => {
                 //stash the account_id into the request object to be used in the next function
-                // NOTE the TYPE for the Request object in this middleware function
                 request.id = result.rows[0].account_id;
                 next();
             })
             .catch((error) => {
-                //log the error
-                // console.log(error)
                 if (error.constraint == 'account_username_key') {
                     response.status(400).send({
                         message: 'Username exists',
@@ -218,9 +211,6 @@ registerRouter.post(
             });
     },
     (request: IUserRequest, response: Response) => {
-        //We're storing salted hashes to make our application more secure
-        //If you're interested as to what that is, and why we should use it
-        //watch this youtube video: https://www.youtube.com/watch?v=8ZtInClXe1Q
         const salt = generateSalt(32);
         const saltedHash = generateHash(request.body.password, salt);
 
@@ -246,13 +236,7 @@ registerRouter.post(
                 });
             })
             .catch((error) => {
-                /***********************************************************************
-                 * If we get an error inserting the PWD, we should go back and remove
-                 * the user from the member table. We don't want a member in that table
-                 * without a PWD! That implementation is up to you if you want to add
-                 * that step.
-                 **********************************************************************/
-                // Done, deletes user with failed add
+                // Deletes user with failed add
                 const theQuery =
                     'DELETE FROM Account WHERE Username = $1 AND Email = $2';
                 const values = [request.body.username, request.body.email];
@@ -266,19 +250,5 @@ registerRouter.post(
             });
     }
 );
-
-registerRouter.get('/hash_demo', (request, response) => {
-    const password = 'password12345';
-
-    const salt = generateSalt(32);
-    const saltedHash = generateHash(password, salt);
-    const unsaltedHash = generateHash(password, '');
-
-    response.status(200).send({
-        salt: salt,
-        salted_hash: saltedHash,
-        unsalted_hash: unsaltedHash,
-    });
-});
 
 export { registerRouter };

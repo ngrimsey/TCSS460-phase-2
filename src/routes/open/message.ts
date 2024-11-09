@@ -2,10 +2,10 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 //Access the connection to Postgres Database
 import { pool, validationFunctions } from '../../core/utilities';
+// Reply with standardized message if missing paramaters
+import { validateBodyParamStrings } from '../../core/middleware';
 
 const messageRouter: Router = express.Router();
-
-const isStringProvided = validationFunctions.isStringProvided;
 
 const format = (resultRow) =>
     `{${resultRow.priority}} - [${resultRow.name}] says: ${resultRow.message}`;
@@ -31,25 +31,6 @@ function mwValidPriorityQuery(
     }
 }
 
-function mwValidNameMessageBody(
-    request: Request,
-    response: Response,
-    next: NextFunction
-) {
-    if (
-        isStringProvided(request.body.name) &&
-        isStringProvided(request.body.message)
-    ) {
-        next();
-    } else {
-        console.error('Missing required information');
-        response.status(400).send({
-            message:
-                'Missing required information - please refer to documentation',
-        });
-    }
-}
-
 /**
  * @apiDefine JSONError
  * @apiError (400: JSON Error) {String} message "malformed JSON in parameters"
@@ -71,13 +52,13 @@ function mwValidNameMessageBody(
  *      "{<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (400: Name exists) {String} message "Name exists"
- * @apiError (400: Missing Parameters) {String} message "Missing required information - please refer to documentation"
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - <code>paramater [+ another param]</code>"
  * @apiError (400: Invalid Priority) {String} message "Invalid or missing Priority  - please refer to documentation"
  * @apiUse JSONError
  */
 messageRouter.post(
     '/',
-    mwValidNameMessageBody,
+    validateBodyParamStrings(["name", "message"]),
     (request: Request, response: Response, next: NextFunction) => {
         const priority: string = request.body.priority as string;
         if (
@@ -232,7 +213,7 @@ messageRouter.get(
  */
 messageRouter.get('/:name', (request: Request, response: Response) => {
     const theQuery = 'SELECT name, message, priority FROM Demo WHERE name = $1';
-    let values = [request.params.name];
+    const values = [request.params.name.slice(1)]; // We remove the first ':' character
 
     pool.query(theQuery, values)
         .then((result) => {
@@ -271,12 +252,12 @@ messageRouter.get('/:name', (request: Request, response: Response) => {
  *      "Updated: {<code>priority</code>} - [<code>name</code>] says: <code>message</code>"
  *
  * @apiError (404: Name Not Found) {String} message "Name not found"
- * @apiError (400: Missing Parameters) {String} message "Missing required information" *
+ * @apiError (400: Missing Parameters) {String} message "Missing required information - <code>paramater [+ another param]</code>"
  * @apiUse JSONError
  */
 messageRouter.put(
     '/',
-    mwValidNameMessageBody,
+    validateBodyParamStrings(["name", "message"]),
     (request: Request, response: Response, next: NextFunction) => {
         const theQuery =
             'UPDATE Demo SET message = $1 WHERE name = $2 RETURNING *';
@@ -368,7 +349,7 @@ messageRouter.delete(
  */
 messageRouter.delete('/:name', (request: Request, response: Response) => {
     const theQuery = 'DELETE FROM Demo  WHERE name = $1 RETURNING *';
-    const values = [request.params.name];
+    const values = [request.params.name.slice(1)]; // We remove the leading ':' character
 
     pool.query(theQuery, values)
         .then((result) => {
