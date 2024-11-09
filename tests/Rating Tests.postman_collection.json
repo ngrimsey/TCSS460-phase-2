@@ -1,0 +1,895 @@
+{
+	"info": {
+		"_postman_id": "81cd76e1-91fb-4f9f-8b14-870bcded1020",
+		"name": "Rating Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39612834"
+	},
+	"item": [
+		{
+			"name": "Rating 200 add 1 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942366;",
+							"    const expectedReview1 = 66716;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_1_star).to.equal(expectedReview1);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 delete 1 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942365;",
+							"    const expectedReview1 = 66715;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_1_star).to.equal(expectedReview1);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 add 2 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942366;",
+							"    const expectedReview2 = 127937;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_2_star).to.equal(expectedReview2);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 delete 2 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942365;",
+							"    const expectedReview2 = 127936;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_2_star).to.equal(expectedReview2);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 add 3 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942366;",
+							"    const expectedReview3 = 560093;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_3_star).to.equal(expectedReview3);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 delete 3 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942365;",
+							"    const expectedReview3 = 560092;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_3_star).to.equal(expectedReview3);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 add 4 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942366;",
+							"    const expectedReview4 = 1481306;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_4_star).to.equal(expectedReview4);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 delete 4 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942365;",
+							"    const expectedReview4 = 1481305;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_4_star).to.equal(expectedReview4);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 add 5 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942366;",
+							"    const expectedReview5 = 2706318;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_5_star).to.equal(expectedReview5);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 200 delete 5 star",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedAvg = 4.34;",
+							"    const expectedTotal = 4942365;",
+							"    const expectedReview5 = 2706317;",
+							"",
+							"    pm.expect(response[0].rating_avg).to.equal(expectedAvg);",
+							"    pm.expect(response[0].rating_count).to.equal(expectedTotal);",
+							"    pm.expect(response[0].rating_5_star).to.equal(expectedReview5);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 400 Missing Parameters add",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedResponse = `Invalid or missing book id number - please refer to documentation`;",
+							"",
+							"    pm.expect(response.message).to.equal(expectedResponse);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 400 Missing Parameters delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedResponse = `Invalid or missing book id number - please refer to documentation`;",
+							"",
+							"    pm.expect(response.message).to.equal(expectedResponse);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rating 400 Invalid Rating add",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code of 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Expected response\", () => {",
+							"    const response = pm.response.json();",
+							"",
+							"    const expectedResponse = `Rating number '10' is not valid!`;",
+							"",
+							"    pm.expect(response.message).to.equal(expectedResponse);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoxLCJpZCI6MSwiaWF0IjoxNzMxMTM2NDIyLCJleHAiOjE3MzIzNDYwMjJ9.AqCgnDIdRubogYGre5SeCCdmd5f5tCbMls__ag4w3zw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"rating\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "10.0.0.229:4000/closed/books/rating",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"229"
+					],
+					"port": "4000",
+					"path": [
+						"closed",
+						"books",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
