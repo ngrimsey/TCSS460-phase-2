@@ -105,6 +105,11 @@ bookRouter.get('/author/:author', async (req: Request, res: Response) => {
     try {
         const query = `SELECT * FROM BOOKS WHERE authors ILIKE $1`;
         const result = await pool.query(query, [`%${author}%`]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'No books found by this author' });
+        }
+
         res.status(200).json(result.rows);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching books by author', error });
@@ -163,11 +168,17 @@ bookRouter.get('/title/:title', async (req: Request, res: Response) => {
  *     }
  */
 bookRouter.get('/rating/:rating', async (req: Request, res: Response) => {
-    const minRating = parseFloat(req.params.rating);
+    const exactRating = parseFloat(req.params.rating);
+
+    if (exactRating < 1 || exactRating > 5) {
+        return res.status(400).json({
+            message: 'Invalid rating - Rating must be between 1 and 5'
+        });
+    }
 
     try {
-        const query = `SELECT * FROM BOOKS WHERE rating_avg >= $1`;
-        const result = await pool.query(query, [minRating]);
+        const query = `SELECT * FROM BOOKS WHERE rating_avg = $1`;
+        const result = await pool.query(query, [exactRating]);
         res.status(200).json(result.rows);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching books by rating', error });
@@ -200,9 +211,15 @@ bookRouter.get('/year/:year', async (req: Request, res: Response) => {
     try {
         const query = `SELECT * FROM BOOKS WHERE publication_year = $1`;
         const result = await pool.query(query, [publicationYear]);
+
+        if (result.rows.length === 0) {
+            throw new Error(`No books found for the year ${publicationYear}`);
+        }
+
         res.status(200).json(result.rows);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching books by publication year', error });
+        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+        res.status(500).json({ message: 'Error fetching books by publication year', error: errorMessage });
     }
 });
 
