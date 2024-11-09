@@ -22,8 +22,9 @@ const isNumberProvided = validationFunctions.isNumberProvided;
 const isValidBookID = (bookId: string): boolean => isStringProvided(bookId);
 
 // ISBN validation
-// No arguments yet
-const isValidISBN = (isbn: string): boolean => isStringProvided(isbn);
+// length has to be 13digits
+const isValidISBN = (isbn: string): boolean =>
+    isNumberProvided(isbn) && /^\d{13}$/.test(isbn);
 
 // Author validation
 // No arguments yet
@@ -50,26 +51,26 @@ const isValidRatingCnt = (ratingCnt: string): boolean =>
 
 // 1 star Rating validation
 // No arguments yet
-const isValidOneStar = (oneStar: string): boolean => isStringProvided(oneStar);
+const isValidOneStar = (oneStar: string): boolean => isNumberProvided(oneStar);
 
 // 2 star Rating validation
 // No arguments yet
-const isValidTwoStar = (twoStar: string): boolean => isStringProvided(twoStar);
+const isValidTwoStar = (twoStar: string): boolean => isNumberProvided(twoStar);
 
 // 3 star Rating validation
 // No arguments yet
 const isValidThreeStar = (threeStar: string): boolean =>
-    isStringProvided(threeStar);
+    isNumberProvided(threeStar);
 
 // 4 star Rating validation
 // No arguments yet
 const isValidFourStar = (fourStar: string): boolean =>
-    isStringProvided(fourStar);
+    isNumberProvided(fourStar);
 
 // 5 star Rating validation
 // No arguments yet
 const isValidFiveStar = (fiveStar: string): boolean =>
-    isStringProvided(fiveStar);
+    isNumberProvided(fiveStar);
 
 // Image URL validation
 // No arguments yet
@@ -94,6 +95,7 @@ addBooksRouter.get('/test', (req, res) => {
  * ID rules:
  *
  * ISBN rules:
+ * - Must be 13 digits.
  *
  * Author rules:
  *
